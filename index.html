@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Remedial Informatika Kelas 7</title>
+
+  <!-- Google Fonts: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Poppins', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            primary: '#2563eb',
+            'primary-dark': '#1d4ed8',
+            'card': '#f9fafb',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Fade-in animation for screen transitions */
+    .fade-in {
+      animation: fadeIn 0.4s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    /* Slide-in for explanation card / next button */
+    .slide-in {
+      animation: slideIn 0.35s ease-out;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body class="font-sans bg-gradient-to-b from-blue-50 to-white min-h-screen flex items-center justify-center p-4">
+
+  <!-- ===================== LOGIN SCREEN ===================== -->
+  <main class="w-full max-w-md">
+    <section id="login-screen" class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 text-center fade-in">
+      <div class="text-7xl mb-4">🧠</div>
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 leading-tight">
+        Remedial Informatika
+      </h1>
+      <p class="text-primary font-semibold text-lg mb-3">Kelas 7</p>
+      <p class="text-gray-600 text-sm sm:text-base mb-6 leading-relaxed">
+        Sebelum mulai, masukkan <strong>nama lengkap</strong> kamu terlebih dahulu.
+        Nama ini akan tersimpan di perangkat ini.
+      </p>
+
+      <form id="login-form" class="space-y-3 text-left">
+        <label for="name-input" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+        <input
+          id="name-input"
+          type="text"
+          inputmode="text"
+          autocomplete="name"
+          maxlength="60"
+          placeholder="Contoh: Nabil Ihsan"
+          class="w-full px-4 py-3.5 text-base rounded-xl border-2 border-gray-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-blue-100 transition-colors"
+        />
+        <p id="name-error" class="hidden text-sm text-red-500 font-medium">⚠ Nama tidak boleh kosong.</p>
+
+        <button
+          id="login-btn"
+          type="submit"
+          disabled
+          class="w-full bg-primary text-white font-semibold text-lg py-3.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98] disabled:bg-gray-300 disabled:shadow-none disabled:cursor-not-allowed disabled:active:scale-100"
+        >
+          Masuk
+        </button>
+      </form>
+    </section>
+
+    <!-- ===================== DASHBOARD SCREEN ===================== -->
+    <section id="dashboard-screen" class="hidden bg-white rounded-2xl shadow-xl p-6 sm:p-8 text-center fade-in">
+      <p class="text-sm text-gray-500 mb-1">Selamat datang,</p>
+      <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-5 leading-tight">
+        Halo, <span id="greeting-name" class="text-primary block truncate" title=""></span>
+      </h2>
+
+      <!-- Best score + status -->
+      <div class="bg-card rounded-xl p-4 mb-5">
+        <p class="text-sm text-gray-500 mb-1">Skor Terbaik</p>
+        <p id="dashboard-best-score" class="text-4xl font-bold text-primary">0</p>
+        <span id="status-badge" class="inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold">—</span>
+      </div>
+
+      <!-- History -->
+      <div class="text-left mb-6">
+        <p class="text-sm font-semibold text-gray-700 mb-2">📜 Riwayat Percobaan</p>
+        <ul id="history-list" class="space-y-2 max-h-56 overflow-y-auto pr-1 text-left">
+          <!-- rendered by JS -->
+        </ul>
+      </div>
+
+      <!-- Action buttons (toggled by JS) -->
+      <button
+        id="start-remedial-btn"
+        class="w-full bg-primary hover:bg-primary-dark text-white font-semibold text-lg py-3.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
+      >
+        Mulai Remedial
+      </button>
+      <a
+        id="wa-btn"
+        href="#"
+        target="_blank"
+        rel="noopener"
+        class="hidden w-full bg-green-500 hover:bg-green-600 text-white font-semibold text-lg py-3.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98] flex items-center justify-center gap-2"
+      >
+        <span>💬</span> Kirim Hasil ke WhatsApp Kak Nabil
+      </a>
+    </section>
+
+    <!-- ===================== QUIZ SCREEN ===================== -->
+    <section id="quiz-screen" class="hidden bg-white rounded-2xl shadow-xl p-5 sm:p-7">
+      <!-- Progress -->
+      <div class="mb-5">
+        <div class="flex justify-between items-center mb-2">
+          <span id="progress-text" class="text-sm font-medium text-gray-600">Soal 1 dari 20</span>
+          <span id="score-text" class="text-sm font-semibold text-primary">Skor: 0</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2.5">
+          <div id="progress-bar" class="bg-primary h-2.5 rounded-full transition-all duration-300" style="width: 5%"></div>
+        </div>
+      </div>
+
+      <!-- Question -->
+      <div id="question-box" class="mb-5">
+        <span id="question-number" class="inline-block bg-blue-100 text-primary text-sm font-semibold px-3 py-1 rounded-full mb-3">
+          Soal 1
+        </span>
+        <p id="question-text" class="text-lg sm:text-xl font-medium text-gray-800 leading-snug">
+          Pertanyaan akan muncul di sini.
+        </p>
+      </div>
+
+      <!-- Options -->
+      <div id="options-container" class="space-y-3 mb-4">
+        <!-- Options rendered by JS -->
+      </div>
+
+      <!-- Explanation card (hidden until answered) -->
+      <div id="explanation-box" class="hidden slide-in bg-blue-50 border-l-4 border-primary rounded-lg p-4 mb-4">
+        <p class="text-sm font-semibold text-primary mb-1">💡 Penjelasan Jawaban</p>
+        <p id="explanation-text" class="text-sm sm:text-base text-gray-700 leading-relaxed"></p>
+      </div>
+
+      <!-- Next button (hidden until answered) -->
+      <button
+        id="next-btn"
+        class="hidden slide-in w-full bg-primary hover:bg-primary-dark text-white font-semibold text-lg py-3.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
+      >
+        Soal Selanjutnya
+      </button>
+    </section>
+
+    <!-- ===================== RESULT SCREEN ===================== -->
+    <section id="result-screen" class="hidden bg-white rounded-2xl shadow-xl p-6 sm:p-8 text-center">
+      <div id="result-emoji" class="text-7xl mb-3">🎉</div>
+      <h2 id="result-title" class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Kuis Selesai!</h2>
+      <p id="result-status-message" class="text-gray-600 text-sm sm:text-base mb-5 leading-relaxed"></p>
+
+      <!-- Score -->
+      <div class="bg-card rounded-xl p-5 mb-4">
+        <p class="text-sm text-gray-500 mb-1">Total Skor</p>
+        <p id="final-score" class="text-5xl font-bold text-primary">0</p>
+        <p class="text-sm text-gray-500 mt-1">dari 100</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-2 gap-3 mb-6">
+        <div class="bg-green-50 rounded-lg p-3">
+          <p class="text-2xl font-bold text-green-600" id="correct-count">0</p>
+          <p class="text-xs text-gray-600 mt-1">Benar</p>
+        </div>
+        <div class="bg-red-50 rounded-lg p-3">
+          <p class="text-2xl font-bold text-red-500" id="wrong-count">0</p>
+          <p class="text-xs text-gray-600 mt-1">Salah</p>
+        </div>
+      </div>
+
+      <!-- Review -->
+      <div class="text-left mb-6">
+        <p class="text-sm font-semibold text-gray-700 mb-2 text-center">📋 Review Jawaban</p>
+        <div id="review-container" class="space-y-2 max-h-72 overflow-y-auto pr-1"></div>
+      </div>
+
+      <button
+        id="back-to-dashboard-btn"
+        class="w-full bg-primary hover:bg-primary-dark text-white font-semibold text-lg py-3.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
+      >
+        Kembali ke Dashboard
+      </button>
+    </section>
+  </main>
+
+  <!-- Scripts (order matters: data first, then logic) -->
+  <script src="quiz-data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
