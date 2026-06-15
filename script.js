@@ -1,5 +1,5 @@
 // ============================================================
-//  LOGIKA KUIS REMEDIAL INFORMATIKA KELAS 7
+//  LOGIKA KUIS REMEDIAL INFORMATIKA KELAS 8
 //  Phase 2: Authentication + Session + WhatsApp integration
 // ------------------------------------------------------------
 //  Tergantung pada: quizData (dari quiz-data.js)
@@ -40,7 +40,17 @@
     statusBadge:        document.getElementById("status-badge"),
     historyList:        document.getElementById("history-list"),
     startRemedialBtn:   document.getElementById("start-remedial-btn"),
+    passingGradeInfo:   document.getElementById("passing-grade-info"),
     waBtn:              document.getElementById("wa-btn"),
+    waInfoText:         document.getElementById("wa-info-text"),
+    confirmModal:       document.getElementById("confirm-modal"),
+    confirmModalCard:   document.getElementById("confirm-modal-card"),
+    confirmCancelBtn:   document.getElementById("confirm-cancel-btn"),
+    confirmStartBtn:    document.getElementById("confirm-start-btn"),
+    evalModal:          document.getElementById("eval-modal"),
+    evalModalCard:      document.getElementById("eval-modal-card"),
+    evalList:           document.getElementById("eval-list"),
+    evalCloseBtn:       document.getElementById("eval-close-btn"),
     // Quiz
     nextBtn:         document.getElementById("next-btn"),
     progressText:    document.getElementById("progress-text"),
@@ -83,6 +93,7 @@
           attempt: Number(h.attempt) || 0,
           score: clampScore(Number(h.score)),
           date: typeof h.date === "string" ? h.date : "",
+          answers: Array.isArray(h.answers) ? h.answers : null,
         }));
       // bestScore selalu di-recompute dari history (self-healing)
       data.bestScore = computeBestScore(data.history);
@@ -114,13 +125,15 @@
     return Math.max(0, Math.min(100, Math.round(n)));
   }
 
-  // Tanggal format DD-MM-YYYY (Indonesia, leading zero)
+  // Tanggal & Jam format DD-MM-YYYY HH:MM (Indonesia, leading zero)
   function todayID() {
     const d = new Date();
     const day = String(d.getDate()).padStart(2, "0");
     const month = String(d.getMonth() + 1).padStart(2, "0");
     const year = d.getFullYear();
-    return `${day}-${month}-${year}`;
+    const hours = String(d.getHours()).padStart(2, "0");
+    const minutes = String(d.getMinutes()).padStart(2, "0");
+    return `${day}-${month}-${year} ${hours}:${minutes}`;
   }
 
   // ============================================================
@@ -185,15 +198,30 @@
 
   // Real-time Title Case preview + toggle tombol Masuk
   function handleNameInput() {
-    const raw = els.nameInput.value;
+    let raw = els.nameInput.value;
     const isValid = raw.trim() !== "";
     // Sembunyikan error saat mulai mengetik ulang
     els.nameError.classList.add("hidden");
     els.loginBtn.disabled = !isValid;
-    // Preview Title Case live (hanya tampilan; nilai akhir diformat ulang saat submit)
-    // Tidak mengganggu kursor: hanya format saat spasi ganda
+
+    // Normalisasi spasi ganda
     if (/\s{2,}/.test(raw)) {
-      els.nameInput.value = raw.replace(/\s+/g, " ");
+      raw = raw.replace(/\s+/g, " ");
+    }
+
+    // Kapitalisasi otomatis di awal kata tanpa mengganggu kursor
+    const selectionStart = els.nameInput.selectionStart;
+    const selectionEnd = els.nameInput.selectionEnd;
+
+    const formatted = raw
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+
+    if (els.nameInput.value !== formatted) {
+      els.nameInput.value = formatted;
+      // Kembalikan posisi kursor
+      els.nameInput.setSelectionRange(selectionStart, selectionEnd);
     }
   }
 
@@ -239,11 +267,15 @@
     // Tombol aksi dinamis
     if (hasPassed) {
       els.startRemedialBtn.classList.add("hidden");
+      if (els.passingGradeInfo) els.passingGradeInfo.classList.add("hidden");
       els.waBtn.classList.remove("hidden");
+      if (els.waInfoText) els.waInfoText.classList.remove("hidden");
       els.waBtn.href = buildWhatsAppUrl(session.name, bestScore);
     } else {
       els.startRemedialBtn.classList.remove("hidden");
+      if (els.passingGradeInfo) els.passingGradeInfo.classList.remove("hidden");
       els.waBtn.classList.add("hidden");
+      if (els.waInfoText) els.waInfoText.classList.add("hidden");
     }
 
     showScreen("dashboard");
@@ -263,14 +295,16 @@
         const passed = h.score >= PASSING_GRADE;
         const color = passed ? "text-green-600" : "text-gray-700";
         const badge = passed ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600";
+        const clickableClass = passed ? "" : "cursor-pointer hover:bg-gray-100 hover:shadow-sm transition-all";
+        const hoverTooltip = passed ? "" : 'title="Klik untuk melihat evaluasi kesalahan"';
         return (
-          `<li class="flex items-center justify-between bg-card rounded-lg px-3 py-2">` +
+          `<li class="flex items-center justify-between bg-card rounded-lg px-3 py-2 ${clickableClass}" data-attempt="${h.attempt}" data-passed="${passed}" ${hoverTooltip}>` +
             `<div class="text-sm">` +
               `<span class="font-medium text-gray-800">Percobaan ${escapeHtml(String(h.attempt))}</span>` +
               `<span class="block text-xs text-gray-400">${escapeHtml(h.date || "")}</span>` +
             `</div>` +
             `<span class="text-lg font-bold ${color}">${h.score}` +
-              `<span class="text-xs font-normal ${badge} ml-1 px-2 py-0.5 rounded-full">${passed ? "Lulus" : "Belum"}</span>` +
+              `<span class="text-xs font-normal ${badge} ml-1 px-2 py-0.5 rounded-full">${passed ? "Lulus" : "Belum Lulus"}</span>` +
             `</span>` +
           `</li>`
         );
@@ -285,8 +319,8 @@
 
   function buildWhatsAppUrl(name, bestScore) {
     const text =
-      `Halo Kak Nabil, saya ${name} telah berhasil menyelesaikan remedial Informatika ` +
-      `dengan nilai akhir ${bestScore}. Berikut saya lampirkan screenshot hasilnya.`;
+      `Assalamu'alaikum warahmatullahi wabarakatuh Kak Nabil, saya ${name} dari kelas VIII/8 telah berhasil menyelesaikan remedial UAS Informatika ` +
+      `dengan nilai akhir ${bestScore}. Berikut saya berikan screenshot hasilnya.`;
     return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
   }
 
@@ -443,6 +477,7 @@
         attempt: attemptNumber,
         score: finalScore,
         date: todayID(),
+        answers: [...answers],
       });
       saveSession(session); // bestScore di-recompute di sini
     }
@@ -499,11 +534,7 @@
       if (isCorrect) {
         detail = `<span class="font-medium text-green-700">Jawabanmu benar</span>`;
       } else {
-        const userLetter = (userAns !== undefined) ? OPTION_LETTERS[userAns] : "-";
-        const correctLetter = OPTION_LETTERS[correctIdx];
-        detail =
-          `<span class="text-red-700">Jawabanmu: ${escapeHtml(userLetter)}. </span>` +
-          `<span class="text-green-700">Benar: ${escapeHtml(correctLetter)}. ${escapeHtml(q.options[correctIdx])}</span>`;
+        detail = `<span class="font-medium text-red-700">Jawabanmu salah</span>`;
       }
 
       item.innerHTML =
@@ -521,6 +552,102 @@
   //  ENTRY POINT / WIRING
   // ============================================================
 
+  // ---------- Custom Confirm Modal Handlers ----------
+  function openConfirmModal() {
+    const modal = els.confirmModal;
+    const card = els.confirmModalCard;
+    if (!modal || !card) return;
+
+    modal.classList.remove("hidden");
+    // Force reflow
+    void modal.offsetWidth;
+
+    modal.classList.add("modal-active");
+    card.classList.add("modal-card-active");
+  }
+
+  function closeConfirmModal() {
+    const modal = els.confirmModal;
+    const card = els.confirmModalCard;
+    if (!modal || !card) return;
+
+    modal.classList.remove("modal-active");
+    card.classList.remove("modal-card-active");
+
+    // Tunggu animasi transisi selesai (300ms) sebelum menyembunyikan
+    setTimeout(() => {
+      if (!modal.classList.contains("modal-active")) {
+        modal.classList.add("hidden");
+      }
+    }, 300);
+  }
+
+  // ---------- Custom Evaluation Modal Handlers ----------
+  function openEvalModal(attemptNumber) {
+    const session = loadSession();
+    if (!session) return;
+    const attempt = session.history.find((h) => h.attempt === attemptNumber);
+    if (!attempt) return;
+
+    // Set title
+    document.getElementById("eval-modal-title").textContent = `Evaluasi Percobaan ${attemptNumber}`;
+
+    const evalList = els.evalList;
+    evalList.innerHTML = "";
+
+    const userAnswers = attempt.answers;
+    if (!userAnswers || !Array.isArray(userAnswers)) {
+      evalList.innerHTML = `<p class="text-sm text-gray-400 italic text-center py-4">Data jawaban untuk percobaan ini tidak tersedia.</p>`;
+    } else {
+      let wrongCount = 0;
+      quizData.forEach((q, i) => {
+        const userAns = userAnswers[i];
+        const correctIdx = q.correctAnswerIndex;
+        if (userAns !== correctIdx) {
+          wrongCount++;
+          const userLetter = (userAns !== undefined && userAns !== null) ? OPTION_LETTERS[userAns] : "-";
+
+          const item = document.createElement("div");
+          item.className = "flex items-center justify-between p-2.5 sm:p-3 rounded-lg border border-red-200 bg-red-50 text-xs sm:text-sm leading-snug";
+          item.innerHTML =
+            `<span class="font-medium text-gray-700 whitespace-nowrap mr-2">Soal ${i + 1}</span>` +
+            `<span class="text-red-700 font-medium whitespace-nowrap">Jawabanmu salah <span class="font-normal text-red-500">(Pilihanmu: ${escapeHtml(userLetter)})</span></span>`;
+          evalList.appendChild(item);
+        }
+      });
+
+      if (wrongCount === 0) {
+        evalList.innerHTML = `<p class="text-sm text-green-600 font-medium text-center py-4">Luar biasa! Tidak ada kesalahan pada percobaan ini.</p>`;
+      }
+    }
+
+    // Open modal
+    const modal = els.evalModal;
+    const card = els.evalModalCard;
+    if (!modal || !card) return;
+
+    modal.classList.remove("hidden");
+    void modal.offsetWidth; // Reflow
+
+    modal.classList.add("modal-active");
+    card.classList.add("modal-card-active");
+  }
+
+  function closeEvalModal() {
+    const modal = els.evalModal;
+    const card = els.evalModalCard;
+    if (!modal || !card) return;
+
+    modal.classList.remove("modal-active");
+    card.classList.remove("modal-card-active");
+
+    setTimeout(() => {
+      if (!modal.classList.contains("modal-active")) {
+        modal.classList.add("hidden");
+      }
+    }, 300);
+  }
+
   function showLogin() {
     // Reset form saat masuk login
     if (els.nameInput) {
@@ -536,9 +663,28 @@
   // Event bindings
   els.loginForm.addEventListener("submit", handleLogin);
   els.nameInput.addEventListener("input", handleNameInput);
-  els.startRemedialBtn.addEventListener("click", startQuiz);
+  els.startRemedialBtn.addEventListener("click", openConfirmModal);
+  els.confirmCancelBtn.addEventListener("click", closeConfirmModal);
+  els.confirmStartBtn.addEventListener("click", () => {
+    closeConfirmModal();
+    startQuiz();
+  });
   els.nextBtn.addEventListener("click", nextQuestion);
   els.backToDashboardBtn.addEventListener("click", showDashboard);
+
+  // Klik riwayat percobaan (hanya memproses jika belum lulus)
+  els.historyList.addEventListener("click", (e) => {
+    const li = e.target.closest("li");
+    if (!li) return;
+    const passed = li.dataset.passed === "true";
+    if (passed) return; // Siswa yang sudah lulus tidak bisa melihat evaluasi agar tidak membagikan jawaban
+    const attempt = Number(li.dataset.attempt);
+    if (attempt) {
+      openEvalModal(attempt);
+    }
+  });
+
+  els.evalCloseBtn.addEventListener("click", closeEvalModal);
 
   // Tampilan awal: dashboard kalau sudah ada session, kalau tidak login
   if (loadSession()) {

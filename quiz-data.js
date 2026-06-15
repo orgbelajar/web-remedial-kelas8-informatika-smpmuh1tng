@@ -1,5 +1,5 @@
 // ============================================================
-//  DATA SOAL KUIS REMEDIAL INFORMATIKA KELAS 7
+//  DATA SOAL KUIS REMEDIAL INFORMATIKA KELAS 8
 // ------------------------------------------------------------
 //  Cara menambah soal baru:
 //    Salin satu blok objek di bawah (dari tanda { hingga }),

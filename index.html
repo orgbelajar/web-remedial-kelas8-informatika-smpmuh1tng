@@ -1,260 +1,480 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Remedial Informatika Kelas 7</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Remedial UAS Informatika Kelas 8</title>
 
-  <!-- Google Fonts: Poppins -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet"
-  />
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- Tailwind CSS via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Poppins', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-          },
-          colors: {
-            primary: '#2563eb',
-            'primary-dark': '#1d4ed8',
-            'card': '#f9fafb',
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Poppins", "ui-sans-serif", "system-ui", "sans-serif"],
+            },
+            colors: {
+              primary: "#2563eb",
+              "primary-dark": "#1d4ed8",
+              card: "#f9fafb",
+            },
           },
         },
-      },
-    };
-  </script>
+      };
+    </script>
 
-  <style>
-    /* Fade-in animation for screen transitions */
-    .fade-in {
-      animation: fadeIn 0.4s ease-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    /* Slide-in for explanation card / next button */
-    .slide-in {
-      animation: slideIn 0.35s ease-out;
-    }
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-  </style>
-</head>
+    <style>
+      /* Fade-in animation for screen transitions */
+      .fade-in {
+        animation: fadeIn 0.4s ease-out;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      /* Slide-in for explanation card / next button */
+      .slide-in {
+        animation: slideIn 0.35s ease-out;
+      }
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      /* Custom Modal Animations */
+      .modal-active {
+        opacity: 1 !important;
+      }
+      .modal-card-active {
+        transform: scale(1) !important;
+        opacity: 1 !important;
+      }
+    </style>
+  </head>
 
-<body class="font-sans bg-gradient-to-b from-blue-50 to-white min-h-screen flex items-center justify-center p-4">
-
-  <!-- ===================== LOGIN SCREEN ===================== -->
-  <main class="w-full max-w-md">
-    <section id="login-screen" class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 text-center fade-in">
-      <!-- Logo sekolah (placeholder; ganti logo-sekolah.svg nanti) -->
-      <img
-        src="logo-sekolah.svg"
-        alt="Logo SMP Muhammadiyah 1 Tangerang"
-        class="w-24 h-24 md:w-32 md:h-32 object-contain mx-auto mb-4"
-        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
-      />
-      <div class="hidden text-6xl mb-4">🏫</div>
-      <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 leading-tight">
-        Remedial Informatika
-      </h1>
-      <p class="text-primary font-semibold text-lg mb-3">Kelas 7</p>
-      <p class="text-gray-600 text-sm sm:text-base mb-6 leading-relaxed">
-        Sebelum mulai, masukkan <strong>nama lengkap</strong> kamu terlebih dahulu.
-        Nama ini akan tersimpan di perangkat ini.
-      </p>
-
-      <form id="login-form" class="space-y-3 text-left">
-        <label for="name-input" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
-        <input
-          id="name-input"
-          type="text"
-          inputmode="text"
-          autocomplete="name"
-          maxlength="60"
-          placeholder="Contoh: Nabil Ihsan"
-          class="w-full px-4 py-3.5 text-base rounded-xl border-2 border-gray-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-blue-100 transition-colors"
+  <body
+    class="font-sans bg-gradient-to-b from-blue-50 to-white min-h-screen flex items-center justify-center p-4"
+  >
+    <!-- ===================== LOGIN SCREEN ===================== -->
+    <main class="w-full max-w-md">
+      <section
+        id="login-screen"
+        class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 text-center fade-in"
+      >
+        <!-- Logo sekolah (placeholder; ganti logo-sekolah.svg nanti) -->
+        <img
+          src="logo-sekolah.svg"
+          alt="Logo SMP Muhammadiyah 1 Tangerang"
+          class="w-36 h-36 md:w-48 md:h-48 object-contain mx-auto mb-4"
+          onerror="
+            this.style.display = 'none';
+            this.nextElementSibling.style.display = 'block';
+          "
         />
-        <p id="name-error" class="hidden text-sm text-red-500 font-medium">⚠ Nama tidak boleh kosong.</p>
+        <div class="hidden text-6xl mb-4">🏫</div>
+        <h1
+          class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 leading-tight"
+        >
+          Remedial UAS Informatika
+        </h1>
+        <p class="text-primary font-semibold text-lg mb-3">Kelas 8</p>
+        <p class="text-gray-600 text-sm sm:text-base mb-6 leading-relaxed">
+          Sebelum mulai, masukkan <strong>nama lengkap</strong> kamu terlebih
+          dahulu. Nama ini akan tersimpan di perangkat ini.
+        </p>
+
+        <form id="login-form" class="space-y-3 text-left">
+          <label
+            for="name-input"
+            class="block text-sm font-medium text-gray-700"
+            >Nama Lengkap</label
+          >
+          <input
+            id="name-input"
+            type="text"
+            inputmode="text"
+            autocomplete="name"
+            maxlength="60"
+            class="w-full px-4 py-3.5 text-base rounded-xl border-2 border-gray-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-blue-100 transition-colors"
+          />
+          <p id="name-error" class="hidden text-sm text-red-500 font-medium">
+            ⚠ Nama tidak boleh kosong.
+          </p>
+
+          <button
+            id="login-btn"
+            type="submit"
+            disabled
+            class="w-full bg-primary text-white font-semibold text-lg py-3.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98] disabled:bg-gray-300 disabled:shadow-none disabled:cursor-not-allowed disabled:active:scale-100"
+          >
+            Masuk
+          </button>
+        </form>
+      </section>
+
+      <!-- ===================== DASHBOARD SCREEN ===================== -->
+      <section
+        id="dashboard-screen"
+        class="hidden bg-white rounded-2xl shadow-xl p-6 sm:p-8 text-center fade-in"
+      >
+        <!-- Mini-header: logo + nama sekolah -->
+        <div
+          class="flex items-center gap-3 mb-4 pb-3 border-b border-gray-100 text-left"
+        >
+          <img
+            src="logo-sekolah.svg"
+            alt="Logo SMP Muhammadiyah 1 Tangerang"
+            class="w-36 h-36 object-contain shrink-0"
+            onerror="
+              this.style.display = 'none';
+              this.nextElementSibling.style.display = 'flex';
+            "
+          />
+          <span
+            class="hidden w-36 h-36 items-center justify-center text-3xl shrink-0"
+            >🏫</span
+          >
+          <div class="flex flex-col">
+            <!-- <span class="text-xs sm:text-lg font-semibold text-gray-500 leading-tight"
+              >SMP Muhammadiyah 1 Tangerang</span
+            > -->
+            <h1 class="text-lg sm:text-xl font-semibold text-gray-800 mt-2 leading-tight">
+              Remedial UAS Informatika Kelas VIII/8
+            </h1>
+          </div>
+        </div>
+
+        <h2
+          class="text-base sm:text-lg font-bold text-gray-800 mb-5 leading-tight"
+        >
+          Halo,
+          <span
+            id="greeting-name"
+            class="text-primary block truncate"
+            title=""
+          ></span>
+        </h2>
+
+        <!-- Best score + status -->
+        <div class="bg-card rounded-xl p-4 mb-5">
+          <p class="text-sm text-gray-500 mb-1">Skor Terbaik</p>
+          <p id="dashboard-best-score" class="text-4xl font-bold text-primary">
+            0
+          </p>
+          <span
+            id="status-badge"
+            class="inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold"
+            >—</span
+          >
+        </div>
+
+        <!-- History -->
+        <div class="text-left mb-6">
+          <p class="text-sm font-semibold text-gray-700 mb-2">
+            📜 Riwayat Percobaan
+          </p>
+          <ul
+            id="history-list"
+            class="space-y-2 max-h-56 overflow-y-auto pr-1 text-left"
+          >
+            <!-- rendered by JS -->
+          </ul>
+        </div>
+
+        <!-- Action buttons (toggled by JS) -->
+        <div
+          id="passing-grade-info"
+          class="hidden text-sm text-gray-600 mb-4 bg-amber-50 border border-amber-200 rounded-xl p-3 text-left flex items-start gap-2"
+        >
+          <span class="text-amber-600 text-lg leading-none">⚠️</span>
+          <span>Nilai remedial wajib minimal 70, jika kurang dari 70 maka harap mengulang remedial kembali</span>
+        </div>
+        <button
+          id="start-remedial-btn"
+          class="w-full bg-primary hover:bg-primary-dark text-white font-semibold text-lg py-3.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
+        >
+          Mulai Remedial
+        </button>
+        <div
+          id="wa-info-text"
+          class="hidden text-sm text-gray-600 mb-3 bg-green-50 border border-green-200 rounded-xl p-3 text-left flex items-start gap-2"
+        >
+          <span class="text-green-600 text-lg leading-none">💡</span>
+          <span>Setelah lulus remedial wajib screenshot/ss hasil ke WhatsApp Kak Nabil dengan klik tombol ini</span>
+        </div>
+        <a
+          id="wa-btn"
+          href="#"
+          target="_blank"
+          rel="noopener"
+          class="hidden w-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-semibold text-sm sm:text-base py-2.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98] flex items-center justify-center gap-2"
+        >
+          <span class="w-7 h-7 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm">
+            <svg
+              class="w-5 h-5"
+              viewBox="0 0 48 48"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g transform="translate(-700.000000, -360.000000)">
+                <path
+                  d="M723.993033,360 C710.762252,360 700,370.765287 700,383.999801 C700,389.248451 701.692661,394.116025 704.570026,398.066947 L701.579605,406.983798 L710.804449,404.035539 C714.598605,406.546975 719.126434,408 724.006967,408 C737.237748,408 748,397.234315 748,384.000199 C748,370.765685 737.237748,360.000398 724.006967,360.000398 L723.993033,360.000398 L723.993033,360 Z M717.29285,372.190836 C716.827488,371.07628 716.474784,371.034071 715.769774,371.005401 C715.529728,370.991464 715.262214,370.977527 714.96564,370.977527 C714.04845,370.977527 713.089462,371.245514 712.511043,371.838033 C711.806033,372.557577 710.056843,374.23638 710.056843,377.679202 C710.056843,381.122023 712.567571,384.451756 712.905944,384.917648 C713.258648,385.382743 717.800808,392.55031 724.853297,395.471492 C730.368379,397.757149 732.00491,397.545307 733.260074,397.27732 C735.093658,396.882308 737.393002,395.527239 737.971421,393.891043 C738.54984,392.25405 738.54984,390.857171 738.380255,390.560912 C738.211068,390.264652 737.745308,390.095816 737.040298,389.742615 C736.335288,389.389811 732.90737,387.696673 732.25849,387.470894 C731.623543,387.231179 731.017259,387.315995 730.537963,387.99333 C729.860819,388.938653 729.198006,389.89831 728.661785,390.476494 C728.238619,390.928051 727.547144,390.984595 726.969123,390.744481 C726.193254,390.420348 724.021298,389.657798 721.340985,387.273388 C719.267356,385.42535 717.856938,383.125756 717.448104,382.434484 C717.038871,381.729275 717.405907,381.319529 717.729948,380.938852 C718.082653,380.501232 718.421026,380.191036 718.77373,379.781688 C719.126434,379.372738 719.323884,379.160897 719.549599,378.681068 C719.789645,378.215575 719.62006,377.735746 719.450874,377.382942 C719.281687,377.030139 717.871269,373.587317 717.29285,372.190836 Z"
+                  fill="#25D366"
+                  fill-rule="evenodd"
+                />
+              </g>
+            </svg>
+          </span>
+          <span>Kirim Hasil ke WhatsApp</span>
+        </a>
+      </section>
+
+      <!-- ===================== QUIZ SCREEN ===================== -->
+      <section
+        id="quiz-screen"
+        class="hidden bg-white rounded-2xl shadow-xl p-5 sm:p-7"
+      >
+        <!-- Mini-header: logo + nama sekolah -->
+        <div
+          class="flex items-center gap-0 mb-4 pb-3 border-b border-gray-100 text-left"
+        >
+          <img
+            src="logo-sekolah.svg"
+            alt="Logo SMP Muhammadiyah 1 Tangerang"
+            class="w-20 h-20 object-contain shrink-0"
+            onerror="
+              this.style.display = 'none';
+              this.nextElementSibling.style.display = 'flex';
+            "
+          />
+          <span
+            class="hidden w-20 h-20 items-center justify-center text-3xl shrink-0"
+            >🏫</span
+          >
+          <span class="text-base sm:text-lg font-semibold text-gray-700 leading-tight"
+            >Remidi UAS Informatika Kelas VIII/8</span
+          >
+        </div>
+
+        <!-- Progress -->
+        <div class="mb-5">
+          <div class="flex justify-between items-center mb-2">
+            <span id="progress-text" class="text-sm font-medium text-gray-600"
+              >Soal 1 dari 20</span
+            >
+            <span id="score-text" class="text-sm font-semibold text-primary"
+              >Skor: 0</span
+            >
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div
+              id="progress-bar"
+              class="bg-primary h-2.5 rounded-full transition-all duration-300"
+              style="width: 5%"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Question -->
+        <div id="question-box" class="mb-5">
+          <span
+            id="question-number"
+            class="inline-block bg-blue-100 text-primary text-sm font-semibold px-3 py-1 rounded-full mb-3"
+          >
+            Soal 1
+          </span>
+          <p
+            id="question-text"
+            class="text-lg sm:text-xl font-medium text-gray-800 leading-snug"
+          >
+            Pertanyaan akan muncul di sini.
+          </p>
+        </div>
+
+        <!-- Options -->
+        <div id="options-container" class="space-y-3 mb-4">
+          <!-- Options rendered by JS -->
+        </div>
+
+        <!-- Explanation card (hidden until answered) -->
+        <div
+          id="explanation-box"
+          class="hidden slide-in bg-blue-50 border-l-4 border-primary rounded-lg p-4 mb-4"
+        >
+          <p class="text-sm font-semibold text-primary mb-1">
+            💡 Penjelasan Jawaban
+          </p>
+          <p
+            id="explanation-text"
+            class="text-sm sm:text-base text-gray-700 leading-relaxed"
+          ></p>
+        </div>
+
+        <!-- Next button (hidden until answered) -->
+        <button
+          id="next-btn"
+          class="hidden slide-in w-full bg-primary hover:bg-primary-dark text-white font-semibold text-lg py-3.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
+        >
+          Soal Selanjutnya
+        </button>
+      </section>
+
+      <!-- ===================== RESULT SCREEN ===================== -->
+      <section
+        id="result-screen"
+        class="hidden bg-white rounded-2xl shadow-xl p-6 sm:p-8 text-center"
+      >
+        <!-- Logo sekolah sebagai stamp resmi (untuk screenshot WA) -->
+        <img
+          src="logo-sekolah.svg"
+          alt="Logo SMP Muhammadiyah 1 Tangerang"
+          class="w-36 h-36 object-contain mx-auto mb-3"
+          onerror="
+            this.style.display = 'none';
+            this.nextElementSibling.style.display = 'block';
+          "
+        />
+        <div class="hidden text-5xl mb-3">🏫</div>
+        <div id="result-emoji" class="text-5xl mb-3">🎉</div>
+        <h2
+          id="result-title"
+          class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2"
+        >
+          Kuis Selesai!
+        </h2>
+        <p
+          id="result-status-message"
+          class="text-gray-600 text-sm sm:text-base mb-5 leading-relaxed"
+        ></p>
+
+        <!-- Score -->
+        <div class="bg-card rounded-xl p-5 mb-4">
+          <p class="text-sm text-gray-500 mb-1">Total Skor</p>
+          <p id="final-score" class="text-5xl font-bold text-primary">0</p>
+          <p class="text-sm text-gray-500 mt-1">dari 100</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-2 gap-3 mb-6">
+          <div class="bg-green-50 rounded-lg p-3">
+            <p class="text-2xl font-bold text-green-600" id="correct-count">
+              0
+            </p>
+            <p class="text-xs text-gray-600 mt-1">Benar</p>
+          </div>
+          <div class="bg-red-50 rounded-lg p-3">
+            <p class="text-2xl font-bold text-red-500" id="wrong-count">0</p>
+            <p class="text-xs text-gray-600 mt-1">Salah</p>
+          </div>
+        </div>
+
+        <!-- Review -->
+        <div class="text-left mb-6">
+          <p class="text-sm font-semibold text-gray-700 mb-2 text-center">
+            📋 Review Jawaban
+          </p>
+          <div
+            id="review-container"
+            class="space-y-2 max-h-72 overflow-y-auto pr-1"
+          ></div>
+        </div>
 
         <button
-          id="login-btn"
-          type="submit"
-          disabled
-          class="w-full bg-primary text-white font-semibold text-lg py-3.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98] disabled:bg-gray-300 disabled:shadow-none disabled:cursor-not-allowed disabled:active:scale-100"
+          id="back-to-dashboard-btn"
+          class="w-full bg-primary hover:bg-primary-dark text-white font-semibold text-lg py-3.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
         >
-          Masuk
+          Kembali ke Dashboard
         </button>
-      </form>
-    </section>
+      </section>
+    </main>
 
-    <!-- ===================== DASHBOARD SCREEN ===================== -->
-    <section id="dashboard-screen" class="hidden bg-white rounded-2xl shadow-xl p-6 sm:p-8 text-center fade-in">
-      <!-- Mini-header: logo + nama sekolah -->
-      <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100 text-left">
-        <img
-          src="logo-sekolah.svg"
-          alt="Logo SMP Muhammadiyah 1 Tangerang"
-          class="w-10 h-10 object-contain shrink-0"
-          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-        />
-        <span class="hidden w-10 h-10 items-center justify-center text-2xl shrink-0">🏫</span>
-        <span class="text-sm font-semibold text-gray-700 leading-tight">SMP Muhammadiyah 1 Tangerang</span>
-      </div>
-
-      <p class="text-sm text-gray-500 mb-1">Selamat datang,</p>
-      <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-5 leading-tight">
-        Halo, <span id="greeting-name" class="text-primary block truncate" title=""></span>
-      </h2>
-
-      <!-- Best score + status -->
-      <div class="bg-card rounded-xl p-4 mb-5">
-        <p class="text-sm text-gray-500 mb-1">Skor Terbaik</p>
-        <p id="dashboard-best-score" class="text-4xl font-bold text-primary">0</p>
-        <span id="status-badge" class="inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold">—</span>
-      </div>
-
-      <!-- History -->
-      <div class="text-left mb-6">
-        <p class="text-sm font-semibold text-gray-700 mb-2">📜 Riwayat Percobaan</p>
-        <ul id="history-list" class="space-y-2 max-h-56 overflow-y-auto pr-1 text-left">
-          <!-- rendered by JS -->
-        </ul>
-      </div>
-
-      <!-- Action buttons (toggled by JS) -->
-      <button
-        id="start-remedial-btn"
-        class="w-full bg-primary hover:bg-primary-dark text-white font-semibold text-lg py-3.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
+    <!-- ===================== CUSTOM CONFIRM MODAL ===================== -->
+    <div
+      id="confirm-modal"
+      class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm transition-opacity duration-300 opacity-0"
+    >
+      <div
+        class="bg-white rounded-2xl shadow-2xl p-6 sm:p-7 max-w-md w-full text-center scale-95 opacity-0 transition-all duration-300 transform"
+        id="confirm-modal-card"
       >
-        Mulai Remedial
-      </button>
-      <a
-        id="wa-btn"
-        href="#"
-        target="_blank"
-        rel="noopener"
-        class="hidden w-full bg-green-500 hover:bg-green-600 text-white font-semibold text-lg py-3.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98] flex items-center justify-center gap-2"
-      >
-        <span>💬</span> Kirim Hasil ke WhatsApp Kak Nabil
-      </a>
-    </section>
-
-    <!-- ===================== QUIZ SCREEN ===================== -->
-    <section id="quiz-screen" class="hidden bg-white rounded-2xl shadow-xl p-5 sm:p-7">
-      <!-- Mini-header: logo + nama sekolah -->
-      <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100 text-left">
-        <img
-          src="logo-sekolah.svg"
-          alt="Logo SMP Muhammadiyah 1 Tangerang"
-          class="w-10 h-10 object-contain shrink-0"
-          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-        />
-        <span class="hidden w-10 h-10 items-center justify-center text-2xl shrink-0">🏫</span>
-        <span class="text-sm font-semibold text-gray-700 leading-tight">SMP Muhammadiyah 1 Tangerang</span>
-      </div>
-
-      <!-- Progress -->
-      <div class="mb-5">
-        <div class="flex justify-between items-center mb-2">
-          <span id="progress-text" class="text-sm font-medium text-gray-600">Soal 1 dari 20</span>
-          <span id="score-text" class="text-sm font-semibold text-primary">Skor: 0</span>
-        </div>
-        <div class="w-full bg-gray-200 rounded-full h-2.5">
-          <div id="progress-bar" class="bg-primary h-2.5 rounded-full transition-all duration-300" style="width: 5%"></div>
-        </div>
-      </div>
-
-      <!-- Question -->
-      <div id="question-box" class="mb-5">
-        <span id="question-number" class="inline-block bg-blue-100 text-primary text-sm font-semibold px-3 py-1 rounded-full mb-3">
-          Soal 1
-        </span>
-        <p id="question-text" class="text-lg sm:text-xl font-medium text-gray-800 leading-snug">
-          Pertanyaan akan muncul di sini.
+        <div class="text-4xl mb-3">📝</div>
+        <h3 class="text-xl font-bold text-gray-800 mb-3">Petunjuk Remedial</h3>
+        <p class="text-gray-600 text-sm sm:text-base mb-6 leading-relaxed text-left">
+          Soal remedial berjumlah <strong>20 Soal Pilihan Ganda</strong>. Pastikan membaca soal dan menjawab dengan teliti. Tidak ada batas waktu pengerjaan setiap soal. Kamu dipersilahkan mencari jawaban dari internet, berdiskusi dengan teman, maupun dengan orang tua.
         </p>
-      </div>
-
-      <!-- Options -->
-      <div id="options-container" class="space-y-3 mb-4">
-        <!-- Options rendered by JS -->
-      </div>
-
-      <!-- Explanation card (hidden until answered) -->
-      <div id="explanation-box" class="hidden slide-in bg-blue-50 border-l-4 border-primary rounded-lg p-4 mb-4">
-        <p class="text-sm font-semibold text-primary mb-1">💡 Penjelasan Jawaban</p>
-        <p id="explanation-text" class="text-sm sm:text-base text-gray-700 leading-relaxed"></p>
-      </div>
-
-      <!-- Next button (hidden until answered) -->
-      <button
-        id="next-btn"
-        class="hidden slide-in w-full bg-primary hover:bg-primary-dark text-white font-semibold text-lg py-3.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
-      >
-        Soal Selanjutnya
-      </button>
-    </section>
-
-    <!-- ===================== RESULT SCREEN ===================== -->
-    <section id="result-screen" class="hidden bg-white rounded-2xl shadow-xl p-6 sm:p-8 text-center">
-      <!-- Logo sekolah sebagai stamp resmi (untuk screenshot WA) -->
-      <img
-        src="logo-sekolah.svg"
-        alt="Logo SMP Muhammadiyah 1 Tangerang"
-        class="w-20 h-20 object-contain mx-auto mb-3"
-        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
-      />
-      <div class="hidden text-5xl mb-3">🏫</div>
-      <div id="result-emoji" class="text-7xl mb-3">🎉</div>
-      <h2 id="result-title" class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Kuis Selesai!</h2>
-      <p id="result-status-message" class="text-gray-600 text-sm sm:text-base mb-5 leading-relaxed"></p>
-
-      <!-- Score -->
-      <div class="bg-card rounded-xl p-5 mb-4">
-        <p class="text-sm text-gray-500 mb-1">Total Skor</p>
-        <p id="final-score" class="text-5xl font-bold text-primary">0</p>
-        <p class="text-sm text-gray-500 mt-1">dari 100</p>
-      </div>
-
-      <!-- Stats -->
-      <div class="grid grid-cols-2 gap-3 mb-6">
-        <div class="bg-green-50 rounded-lg p-3">
-          <p class="text-2xl font-bold text-green-600" id="correct-count">0</p>
-          <p class="text-xs text-gray-600 mt-1">Benar</p>
-        </div>
-        <div class="bg-red-50 rounded-lg p-3">
-          <p class="text-2xl font-bold text-red-500" id="wrong-count">0</p>
-          <p class="text-xs text-gray-600 mt-1">Salah</p>
+        <div class="flex gap-3">
+          <button
+            id="confirm-cancel-btn"
+            class="flex-1 border-2 border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold py-3 rounded-xl transition-all duration-200 active:scale-[0.98]"
+          >
+            Batal
+          </button>
+          <button
+            id="confirm-start-btn"
+            class="flex-1 bg-primary hover:bg-primary-dark text-white font-semibold py-3 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
+          >
+            Mulai Kuis
+          </button>
         </div>
       </div>
+    </div>
 
-      <!-- Review -->
-      <div class="text-left mb-6">
-        <p class="text-sm font-semibold text-gray-700 mb-2 text-center">📋 Review Jawaban</p>
-        <div id="review-container" class="space-y-2 max-h-72 overflow-y-auto pr-1"></div>
-      </div>
-
-      <button
-        id="back-to-dashboard-btn"
-        class="w-full bg-primary hover:bg-primary-dark text-white font-semibold text-lg py-3.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
+    <!-- ===================== EVALUATION MODAL ===================== -->
+    <div
+      id="eval-modal"
+      class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm transition-opacity duration-300 opacity-0"
+    >
+      <div
+        class="bg-white rounded-2xl shadow-2xl p-5 sm:p-7 max-w-md w-full max-h-[85vh] flex flex-col scale-95 opacity-0 transition-all duration-300 transform"
+        id="eval-modal-card"
       >
-        Kembali ke Dashboard
-      </button>
-    </section>
-  </main>
+        <div class="text-4xl text-center mb-3">🔍</div>
+        <h3 id="eval-modal-title" class="text-xl font-bold text-gray-800 text-center mb-1">
+          Evaluasi Percobaan
+        </h3>
+        <p class="text-xs text-gray-400 text-center mb-4">
+          Hanya menampilkan nomor soal yang salah dan pilihan jawaban Anda.
+        </p>
+        
+        <!-- Scrollable list -->
+        <div
+          id="eval-list"
+          class="flex-1 overflow-y-auto space-y-2 mb-6 pr-1 text-left"
+        >
+          <!-- populated dynamically by JS -->
+        </div>
 
-  <!-- Scripts (order matters: data first, then logic) -->
-  <script src="quiz-data.js"></script>
-  <script src="script.js"></script>
-</body>
+        <button
+          id="eval-close-btn"
+          class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
+        >
+          Tutup
+        </button>
+      </div>
+    </div>
+
+    <!-- Scripts (order matters: data first, then logic) -->
+    <script src="quiz-data.js"></script>
+    <script src="script.js"></script>
+  </body>
 </html>
