@@ -57,7 +57,14 @@
   <!-- ===================== LOGIN SCREEN ===================== -->
   <main class="w-full max-w-md">
     <section id="login-screen" class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 text-center fade-in">
-      <div class="text-7xl mb-4">🧠</div>
+      <!-- Logo sekolah (placeholder; ganti logo-sekolah.svg nanti) -->
+      <img
+        src="logo-sekolah.svg"
+        alt="Logo SMP Muhammadiyah 1 Tangerang"
+        class="w-24 h-24 md:w-32 md:h-32 object-contain mx-auto mb-4"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+      />
+      <div class="hidden text-6xl mb-4">🏫</div>
       <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 leading-tight">
         Remedial Informatika
       </h1>
@@ -93,6 +100,18 @@
 
     <!-- ===================== DASHBOARD SCREEN ===================== -->
     <section id="dashboard-screen" class="hidden bg-white rounded-2xl shadow-xl p-6 sm:p-8 text-center fade-in">
+      <!-- Mini-header: logo + nama sekolah -->
+      <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100 text-left">
+        <img
+          src="logo-sekolah.svg"
+          alt="Logo SMP Muhammadiyah 1 Tangerang"
+          class="w-10 h-10 object-contain shrink-0"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+        <span class="hidden w-10 h-10 items-center justify-center text-2xl shrink-0">🏫</span>
+        <span class="text-sm font-semibold text-gray-700 leading-tight">SMP Muhammadiyah 1 Tangerang</span>
+      </div>
+
       <p class="text-sm text-gray-500 mb-1">Selamat datang,</p>
       <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-5 leading-tight">
         Halo, <span id="greeting-name" class="text-primary block truncate" title=""></span>
@@ -133,6 +152,18 @@
 
     <!-- ===================== QUIZ SCREEN ===================== -->
     <section id="quiz-screen" class="hidden bg-white rounded-2xl shadow-xl p-5 sm:p-7">
+      <!-- Mini-header: logo + nama sekolah -->
+      <div class="flex items-center gap-2 mb-4 pb-3 border-b border-gray-100 text-left">
+        <img
+          src="logo-sekolah.svg"
+          alt="Logo SMP Muhammadiyah 1 Tangerang"
+          class="w-10 h-10 object-contain shrink-0"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+        <span class="hidden w-10 h-10 items-center justify-center text-2xl shrink-0">🏫</span>
+        <span class="text-sm font-semibold text-gray-700 leading-tight">SMP Muhammadiyah 1 Tangerang</span>
+      </div>
+
       <!-- Progress -->
       <div class="mb-5">
         <div class="flex justify-between items-center mb-2">
@@ -176,6 +207,14 @@
 
     <!-- ===================== RESULT SCREEN ===================== -->
     <section id="result-screen" class="hidden bg-white rounded-2xl shadow-xl p-6 sm:p-8 text-center">
+      <!-- Logo sekolah sebagai stamp resmi (untuk screenshot WA) -->
+      <img
+        src="logo-sekolah.svg"
+        alt="Logo SMP Muhammadiyah 1 Tangerang"
+        class="w-20 h-20 object-contain mx-auto mb-3"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+      />
+      <div class="hidden text-5xl mb-3">🏫</div>
       <div id="result-emoji" class="text-7xl mb-3">🎉</div>
       <h2 id="result-title" class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Kuis Selesai!</h2>
       <p id="result-status-message" class="text-gray-600 text-sm sm:text-base mb-5 leading-relaxed"></p>
