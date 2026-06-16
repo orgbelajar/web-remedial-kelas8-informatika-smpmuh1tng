@@ -492,8 +492,6 @@
                 `<div class="flex items-center gap-2 text-xs bg-red-50 border border-red-100 rounded px-2 py-1">` +
                   `<span class="font-medium text-gray-700 shrink-0">Soal ${escapeHtml(String(wq.no))}</span>` +
                   `<span class="text-red-600">Jawabanmu: ${escapeHtml(String(wq.selected))}</span>` +
-                  `<span class="text-gray-400">→</span>` +
-                  `<span class="text-green-600 font-medium">Benar: ${escapeHtml(String(wq.correct))}</span>` +
                 `</div>`
               ).join("") +
             `</div>`;
