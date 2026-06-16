@@ -574,7 +574,7 @@
       ? ` dalam waktu ${formatDurationHuman(duration)}`
       : "";
     const text =
-      `Assalamu'alaikum warahmatullahi wabarakatuh Kak Nabil, saya ${name} dari kelas VIII/8 telah berhasil menyelesaikan remedial UAS Informatika ` +
+      `Assalamu'alaikum warahmatullahi wabarakatuh Kak Nabil, saya ${name} dari kelas VIII/8 telah berhasil menyelesaikan Remedial UAS Mapel Informatika ` +
       `dengan nilai akhir ${bestScore}${durationText}. Berikut saya berikan screenshot hasilnya.`;
     return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
   }
