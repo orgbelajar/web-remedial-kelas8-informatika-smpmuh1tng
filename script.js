@@ -1000,6 +1000,41 @@
     stopTimer();
   });
 
+  // ---------- Theme Switcher Logic ----------
+  const themeButtons = {
+    light: document.getElementById("theme-light-btn"),
+    dark:  document.getElementById("theme-dark-btn"),
+    warm:  document.getElementById("theme-warm-btn")
+  };
+
+  function applyTheme(themeName) {
+    document.documentElement.classList.remove("theme-dark", "theme-warm");
+    if (themeName !== "light") {
+      document.documentElement.classList.add("theme-" + themeName);
+    }
+    localStorage.setItem("kuis-theme", themeName);
+    Object.keys(themeButtons).forEach((name) => {
+      const btn = themeButtons[name];
+      if (btn) {
+        if (name === themeName) {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+      }
+    });
+  }
+
+  Object.keys(themeButtons).forEach((name) => {
+    const btn = themeButtons[name];
+    if (btn) {
+      btn.addEventListener("click", () => applyTheme(name));
+    }
+  });
+
+  const currentTheme = localStorage.getItem("kuis-theme") || "light";
+  applyTheme(currentTheme);
+
   // Tampilan awal: prioritas — hasil kuis (refresh) > kuis yang tertunda (anti-refresh) > session > login
   const pendingResult = loadResultState();
   const pendingQuiz = loadQuizState();
