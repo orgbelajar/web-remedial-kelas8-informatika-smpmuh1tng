@@ -1025,7 +1025,7 @@
     });
 
     // Swap logo sekolah: gunakan versi dark saat dark mode aktif
-    const logoSrc = themeName === "dark" ? "logo-sekolah-dark.svg" : "logo-sekolah.svg";
+    const logoSrc = themeName === "dark" ? "logo-sekolah-dark.png" : "logo-sekolah.svg";
     document.querySelectorAll("img[data-school-logo]").forEach((img) => {
       img.src = logoSrc;
     });
