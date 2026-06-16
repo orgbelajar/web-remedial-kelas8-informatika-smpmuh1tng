@@ -55,6 +55,11 @@
     confirmStartBtn:    document.getElementById("confirm-start-btn"),
     // Quiz
     quizTimer:       document.getElementById("quiz-timer"),
+    quizExitBtn:     document.getElementById("quiz-exit-btn"),
+    exitConfirmModal: document.getElementById("exit-confirm-modal"),
+    exitConfirmModalCard: document.getElementById("exit-confirm-modal-card"),
+    exitConfirmCancelBtn: document.getElementById("exit-confirm-cancel-btn"),
+    exitConfirmBtn:  document.getElementById("exit-confirm-btn"),
     nextBtn:         document.getElementById("next-btn"),
     progressText:    document.getElementById("progress-text"),
     scoreText:       document.getElementById("score-text"),
@@ -462,8 +467,8 @@
 
     reversed.forEach((h) => {
       const passed = h.score >= PASSING_GRADE;
-      const color = passed ? "text-green-600" : "text-gray-700";
-      const badge = passed ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600";
+      const color = passed ? "text-success" : "text-ink/70";
+      const badge = passed ? "bg-success/10 text-success" : "bg-slate-200/60 text-ink/50";
 
       // Tentukan correctCount / wrongCount / wrongQuestions (komputasi ulang dari answers untuk data lama)
       let correctCount = h.correctCount;
@@ -487,17 +492,17 @@
       // ---- Baris utama (klik untuk toggle) ----
       const headerLi = document.createElement("li");
       headerLi.className =
-        "flex items-center justify-between bg-card rounded-lg px-3 py-2 cursor-pointer hover:bg-gray-100 hover:shadow-sm transition-all select-none";
+        "flex items-center justify-between bg-slate-50 border border-slate-100 rounded-2xl px-4 py-3.5 cursor-pointer hover:bg-slate-100/70 transition-all duration-200 select-none shadow-sm";
       headerLi.dataset.attempt = String(h.attempt);
       headerLi.dataset.passed = String(passed);
       headerLi.innerHTML =
         `<div class="text-sm flex-1 min-w-0">` +
-          `<span class="font-medium text-gray-800">Percobaan ${escapeHtml(String(h.attempt))}</span>` +
-          `<span class="block text-xs text-gray-400">${escapeHtml(h.date || "")}</span>` +
+          `<span class="font-bold text-ink/80">Percobaan ${escapeHtml(String(h.attempt))}</span>` +
+          `<span class="block text-[11px] text-ink/40 font-medium mt-0.5">${escapeHtml(h.date || "")}</span>` +
         `</div>` +
-        `<span class="text-lg font-bold ${color} whitespace-nowrap ml-2">` +
+        `<span class="text-base font-extrabold ${color} whitespace-nowrap ml-2 flex items-center gap-1.5">` +
           `${h.score}` +
-          `<span class="text-xs font-normal ${badge} ml-1 px-2 py-0.5 rounded-full">${passed ? "Lulus" : "Belum"}</span>` +
+          `<span class="text-[10px] font-bold ${badge} px-2 py-0.5 rounded-full">${passed ? "Lulus" : "Belum"}</span>` +
         `</span>`;
 
       // ---- Panel detail (default hidden) ----
@@ -510,45 +515,46 @@
         : "N/A";
 
       let detailHTML =
-        `<div class="bg-white border border-gray-200 rounded-lg p-3 space-y-2 text-sm">` +
+        `<div class="bg-white border border-slate-100/80 rounded-2xl p-4 mt-2 mb-1 space-y-3 shadow-inner">` +
           // Ringkasan statistik
-          `<div class="grid grid-cols-3 gap-2 text-center">` +
-            `<div class="bg-green-50 rounded-md p-2 flex flex-col justify-between">` +
-              `<p class="font-bold text-green-600 text-sm sm:text-base leading-tight">${correctCount}</p>` +
-              `<p class="text-[10px] text-gray-500 mt-1">Benar</p>` +
+          `<div class="grid grid-cols-3 gap-2.5 text-center">` +
+            `<div class="bg-success/5 border border-success/10 rounded-xl p-2 flex flex-col justify-between items-center">` +
+              `<p class="font-extrabold text-success text-sm sm:text-base leading-tight">${correctCount}</p>` +
+              `<p class="text-[9px] font-bold text-success/70 uppercase tracking-wider mt-1">Benar</p>` +
             `</div>` +
-            `<div class="bg-red-50 rounded-md p-2 flex flex-col justify-between">` +
-              `<p class="font-bold text-red-500 text-sm sm:text-base leading-tight">${wrongCount}</p>` +
-              `<p class="text-[10px] text-gray-500 mt-1">Salah</p>` +
+            `<div class="bg-error/5 border border-error/10 rounded-xl p-2 flex flex-col justify-between items-center">` +
+              `<p class="font-extrabold text-error text-sm sm:text-base leading-tight">${wrongCount}</p>` +
+              `<p class="text-[9px] font-bold text-error/70 uppercase tracking-wider mt-1">Salah</p>` +
             `</div>` +
-            `<div class="bg-blue-50 rounded-md p-2 flex flex-col justify-between">` +
-              `<p class="font-bold text-blue-600 text-sm sm:text-base leading-tight">${escapeHtml(durationText)}</p>` +
-              `<p class="text-[10px] text-gray-500 mt-1">Waktu</p>` +
+            `<div class="bg-blue-50/50 border border-blue-100/30 rounded-xl p-2 flex flex-col justify-between items-center">` +
+              `<p class="font-extrabold text-primary text-sm sm:text-base leading-tight">${escapeHtml(durationText)}</p>` +
+              `<p class="text-[9px] font-bold text-primary/70 uppercase tracking-wider mt-1">Waktu</p>` +
             `</div>` +
           `</div>`;
 
       if (passed) {
         // LULUS: ucapan selamat, SEMBUNYIKAN rincian soal salah
         detailHTML +=
-          `<p class="text-green-700 font-medium text-center text-xs pt-1">🎉 Selamat, kamu telah lulus remedial!</p>`;
+          `<p class="text-success font-bold text-center text-xs py-1.5 bg-success/5 rounded-lg border border-success/15">🎉 Selamat, kamu telah lulus remedial!</p>`;
       } else {
         // BELUM LULUS: tampilkan daftar soal salah
         if (wrongQuestions && wrongQuestions.length > 0) {
           detailHTML +=
-            `<p class="text-xs font-semibold text-gray-600 pt-1">Soal yang salah:</p>` +
-            `<div class="space-y-1">` +
+            `<p class="text-[11px] font-bold text-ink/50 uppercase tracking-wider pt-2">Soal yang salah:</p>` +
+            `<div class="space-y-1.5">` +
               wrongQuestions.map((wq) =>
-                `<div class="flex items-center justify-between text-xs bg-red-50 border border-red-100 rounded px-2 py-1">` +
-                  `<span class="font-medium text-gray-700">Soal ${escapeHtml(String(wq.no))}</span>` +
-                  `<span class="text-red-600 font-medium">Jawabanmu: ${escapeHtml(String(wq.selected))}</span>` +
+                `<div class="flex items-center justify-between text-xs bg-error/5 border border-error/10 rounded-xl px-3 py-2 text-ink/80">` +
+                  `<span class="font-semibold text-ink/70">Soal ${escapeHtml(String(wq.no))}</span>` +
+                  `<span class="text-error font-bold">Jawabanmu: ${escapeHtml(String(wq.selected))}</span>` +
                 `</div>`
               ).join("") +
             `</div>`;
         } else {
-          detailHTML += `<p class="text-xs text-gray-400 italic text-center pt-1">Tidak ada data rincian jawaban untuk percobaan ini.</p>`;
+          detailHTML += `<p class="text-xs text-ink/40 italic text-center pt-1">Tidak ada data rincian jawaban untuk percobaan ini.</p>`;
         }
       }
       detailHTML += `</div>`;
+      detailHTML += `</li>`; // pastikan ditutup
       detailLi.innerHTML = detailHTML;
 
       els.historyList.appendChild(headerLi);
@@ -620,15 +626,15 @@
       btn.type = "button";
       btn.dataset.index = idx;
       btn.className =
-        "option-btn w-full text-left p-4 rounded-xl border-2 border-gray-200 bg-white " +
-        "flex items-center gap-3 transition-all duration-200 " +
-        "hover:border-blue-400 hover:bg-blue-50 active:scale-[0.99] " +
-        "disabled:cursor-default disabled:hover:border-gray-200 disabled:hover:bg-white";
+        "option-btn w-full text-left p-3.5 rounded-2xl border-2 border-slate-100 bg-white shadow-sm " +
+        "flex items-center gap-3.5 transition-all duration-200 " +
+        "hover:border-primary/45 hover:bg-slate-50/50 active:scale-[0.99] " +
+        "disabled:cursor-default disabled:hover:border-slate-100 disabled:hover:bg-white";
 
       btn.innerHTML =
-        `<span class="option-letter shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 font-semibold text-sm transition-colors">` +
+        `<span class="option-letter shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-ink/70 font-extrabold text-sm transition-all duration-200">` +
         `${OPTION_LETTERS[idx]}</span>` +
-        `<span class="option-text flex-1 text-base sm:text-lg text-gray-700">${escapeHtml(opt)}</span>`;
+        `<span class="option-text flex-1 text-sm sm:text-base text-ink/80 font-medium leading-snug">${escapeHtml(opt)}</span>`;
 
       btn.addEventListener("click", () => selectAnswer(idx));
       els.optionsContainer.appendChild(btn);
@@ -644,21 +650,21 @@
         btn.disabled = true;
 
         if (idx === correctIdx) {
-          btn.classList.remove("border-gray-200", "bg-white");
-          btn.classList.add("border-green-500", "bg-green-50");
-          btn.querySelector(".option-letter").classList.remove("bg-gray-100", "text-gray-600");
-          btn.querySelector(".option-letter").classList.add("bg-green-500", "text-white");
-          btn.querySelector(".option-text").classList.add("text-green-700", "font-medium");
-          appendMark(btn, "✓", "text-green-600");
+          btn.classList.remove("border-slate-100", "bg-white");
+          btn.classList.add("border-success", "bg-success/5");
+          btn.querySelector(".option-letter").classList.remove("bg-slate-100", "text-ink/70");
+          btn.querySelector(".option-letter").classList.add("bg-success", "text-white");
+          btn.querySelector(".option-text").classList.add("text-success", "font-bold");
+          appendMark(btn, "✓", "text-success");
         } else if (idx === selectedIdx) {
-          btn.classList.remove("border-gray-200", "bg-white");
-          btn.classList.add("border-red-400", "bg-red-50");
-          btn.querySelector(".option-letter").classList.remove("bg-gray-100", "text-gray-600");
-          btn.querySelector(".option-letter").classList.add("bg-red-500", "text-white");
-          btn.querySelector(".option-text").classList.add("text-red-700");
-          appendMark(btn, "✗", "text-red-500");
+          btn.classList.remove("border-slate-100", "bg-white");
+          btn.classList.add("border-error", "bg-error/5");
+          btn.querySelector(".option-letter").classList.remove("bg-slate-100", "text-ink/70");
+          btn.querySelector(".option-letter").classList.add("bg-error", "text-white");
+          btn.querySelector(".option-text").classList.add("text-error", "font-bold");
+          appendMark(btn, "✗", "text-error");
         } else {
-          btn.classList.add("opacity-60");
+          btn.classList.add("opacity-40");
         }
       });
 
@@ -695,23 +701,23 @@
 
       if (idx === correct) {
         // Tandai jawaban BENAR dengan hijau
-        btn.classList.remove("border-gray-200", "bg-white");
-        btn.classList.add("border-green-500", "bg-green-50");
-        btn.querySelector(".option-letter").classList.remove("bg-gray-100", "text-gray-600");
-        btn.querySelector(".option-letter").classList.add("bg-green-500", "text-white");
-        btn.querySelector(".option-text").classList.add("text-green-700", "font-medium");
-        appendMark(btn, "✓", "text-green-600");
+        btn.classList.remove("border-slate-100", "bg-white");
+        btn.classList.add("border-success", "bg-success/5");
+        btn.querySelector(".option-letter").classList.remove("bg-slate-100", "text-ink/70");
+        btn.querySelector(".option-letter").classList.add("bg-success", "text-white");
+        btn.querySelector(".option-text").classList.add("text-success", "font-bold");
+        appendMark(btn, "✓", "text-success");
       } else if (idx === index) {
         // Tandai pilihan siswa yang SALAH dengan merah
-        btn.classList.remove("border-gray-200", "bg-white");
-        btn.classList.add("border-red-400", "bg-red-50");
-        btn.querySelector(".option-letter").classList.remove("bg-gray-100", "text-gray-600");
-        btn.querySelector(".option-letter").classList.add("bg-red-500", "text-white");
-        btn.querySelector(".option-text").classList.add("text-red-700");
-        appendMark(btn, "✗", "text-red-500");
+        btn.classList.remove("border-slate-100", "bg-white");
+        btn.classList.add("border-error", "bg-error/5");
+        btn.querySelector(".option-letter").classList.remove("bg-slate-100", "text-ink/70");
+        btn.querySelector(".option-letter").classList.add("bg-error", "text-white");
+        btn.querySelector(".option-text").classList.add("text-error", "font-bold");
+        appendMark(btn, "✗", "text-error");
       } else {
         // Opsi lain dikaburkan sedikit
-        btn.classList.add("opacity-60");
+        btn.classList.add("opacity-40");
       }
     });
 
@@ -741,7 +747,7 @@
   // Tambah tanda centang/silang di kanan tombol opsi
   function appendMark(btn, symbol, colorClass) {
     const mark = document.createElement("span");
-    mark.className = `shrink-0 font-bold text-xl ${colorClass}`;
+    mark.className = `shrink-0 font-bold text-lg ${colorClass} ml-auto`;
     mark.textContent = symbol;
     btn.appendChild(mark);
   }
@@ -811,13 +817,13 @@
       emoji = "🎉";
       title = "Selamat!";
       statusMsg =
-        `Selamat! Nilai kamu <strong class="text-green-600">${finalScore}</strong>. ` +
+        `Selamat! Nilai kamu <strong class="text-success">${finalScore}</strong>. ` +
         `Kamu berhasil lulus remedial.`;
     } else {
       emoji = "💪";
       title = "Belum Lulus";
       statusMsg =
-        `Maaf, nilai kamu <strong class="text-red-500">${finalScore}</strong>. ` +
+        `Maaf, nilai kamu <strong class="text-error">${finalScore}</strong>. ` +
         `Kamu belum memenuhi KKM (${PASSING_GRADE}). Silakan coba lagi.`;
     }
 
@@ -844,25 +850,25 @@
 
       const item = document.createElement("div");
       item.className =
-        `flex items-start gap-2 p-3 rounded-lg border ` +
+        `flex items-start gap-3 p-3.5 rounded-2xl border shadow-sm transition-all duration-200 ` +
         (isCorrect
-          ? "bg-green-50 border-green-200"
-          : "bg-red-50 border-red-200");
+          ? "bg-success/5 border-success/15 text-success"
+          : "bg-error/5 border-error/15 text-error");
 
       const mark = isCorrect ? "✓" : "✗";
-      const markColor = isCorrect ? "text-green-600" : "text-red-500";
+      const markColor = isCorrect ? "text-success" : "text-error";
 
       let detail = "";
       if (isCorrect) {
-        detail = `<span class="font-medium text-green-700">Jawabanmu benar</span>`;
+        detail = `<span class="font-bold text-success">Jawaban benar</span>`;
       } else {
-        detail = `<span class="font-medium text-red-700">Jawabanmu salah</span>`;
+        detail = `<span class="font-bold text-error">Jawaban salah</span>`;
       }
 
       item.innerHTML =
-        `<span class="font-bold ${markColor} shrink-0">${mark}</span>` +
+        `<span class="font-extrabold text-base shrink-0 ${markColor}">${mark}</span>` +
         `<div class="text-sm leading-snug">` +
-          `<span class="font-medium text-gray-700">Soal ${i + 1}: </span>` +
+          `<span class="font-bold text-ink/85">Soal ${i + 1}: </span>` +
           detail +
         `</div>`;
 
@@ -904,6 +910,37 @@
     }, 300);
   }
 
+  // ---------- Custom Exit Confirm Modal Handlers ----------
+  function openExitConfirmModal() {
+    const modal = els.exitConfirmModal;
+    const card = els.exitConfirmModalCard;
+    if (!modal || !card) return;
+
+    modal.classList.remove("hidden");
+    // Force reflow
+    void modal.offsetWidth;
+
+    modal.classList.add("modal-active");
+    card.classList.add("modal-card-active");
+  }
+
+  // Tutup modal keluar kuis
+  function closeExitConfirmModal() {
+    const modal = els.exitConfirmModal;
+    const card = els.exitConfirmModalCard;
+    if (!modal || !card) return;
+
+    modal.classList.remove("modal-active");
+    card.classList.remove("modal-card-active");
+
+    // Tunggu animasi transisi selesai (300ms) sebelum menyembunyikan
+    setTimeout(() => {
+      if (!modal.classList.contains("modal-active")) {
+        modal.classList.add("hidden");
+      }
+    }, 300);
+  }
+
   function showLogin() {
     // Reset form saat masuk login
     if (els.nameInput) {
@@ -924,6 +961,14 @@
   els.confirmStartBtn.addEventListener("click", () => {
     closeConfirmModal();
     startQuiz();
+  });
+  els.quizExitBtn.addEventListener("click", openExitConfirmModal);
+  els.exitConfirmCancelBtn.addEventListener("click", closeExitConfirmModal);
+  els.exitConfirmBtn.addEventListener("click", () => {
+    closeExitConfirmModal();
+    stopTimer();
+    clearQuizState();
+    showDashboard();
   });
   els.nextBtn.addEventListener("click", nextQuestion);
   els.backToDashboardBtn.addEventListener("click", () => {

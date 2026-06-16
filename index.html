@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Remedial UAS Informatika Kelas 8</title>
 
-    <!-- Google Fonts: Poppins -->
+    <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
 
@@ -20,12 +20,24 @@
         theme: {
           extend: {
             fontFamily: {
-              sans: ["Poppins", "ui-sans-serif", "system-ui", "sans-serif"],
+              sans: ["Plus Jakarta Sans", "ui-sans-serif", "system-ui", "sans-serif"],
             },
             colors: {
-              primary: "#2563eb",
-              "primary-dark": "#1d4ed8",
-              card: "#f9fafb",
+              primary: "oklch(60% 0.16 250)",
+              "primary-dark": "oklch(52% 0.16 250)",
+              success: "oklch(69% 0.16 140)",
+              error: "oklch(65% 0.19 25)",
+              warning: "oklch(78% 0.15 75)",
+              ink: "oklch(20% 0.02 250)",
+              paper: "oklch(98% 0.01 250)",
+            },
+            boxShadow: {
+              soft: "0 8px 30px rgb(0 0 0 / 0.04)",
+              button: "0 4px 14px oklch(60% 0.16 250 / 0.15)",
+            },
+            borderRadius: {
+              "2xl": "1.25rem",
+              "3xl": "1.75rem",
             },
           },
         },
@@ -33,6 +45,26 @@
     </script>
 
     <style>
+      /* Responsiveness & layout safety */
+      html, body {
+        overflow-x: clip;
+        max-width: 100%;
+      }
+      /* Custom scrollbar for history and review */
+      .scrollbar-thin::-webkit-scrollbar {
+        width: 5px;
+      }
+      .scrollbar-thin::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .scrollbar-thin::-webkit-scrollbar-thumb {
+        background: oklch(20% 0.02 250 / 0.1);
+        border-radius: 9999px;
+      }
+      .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+        background: oklch(20% 0.02 250 / 0.2);
+      }
+
       /* Fade-in animation for screen transitions */
       .fade-in {
         animation: fadeIn 0.4s ease-out;
@@ -73,19 +105,19 @@
   </head>
 
   <body
-    class="font-sans bg-gradient-to-b from-blue-50 to-white min-h-screen flex items-center justify-center p-4"
+    class="font-sans bg-slate-50 text-ink min-h-screen flex items-center justify-center p-4 sm:p-6"
   >
     <!-- ===================== LOGIN SCREEN ===================== -->
     <main class="w-full max-w-md">
       <section
         id="login-screen"
-        class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 text-center fade-in"
+        class="bg-white rounded-3xl border border-slate-100 shadow-soft p-6 sm:p-8 text-center fade-in"
       >
-        <!-- Logo sekolah (placeholder; ganti logo-sekolah.svg nanti) -->
+        <!-- Logo sekolah -->
         <img
           src="logo-sekolah.svg"
           alt="Logo SMP Muhammadiyah 1 Tangerang"
-          class="w-36 h-36 md:w-48 md:h-48 object-contain mx-auto mb-4"
+          class="w-24 h-24 sm:w-28 sm:h-28 object-contain mx-auto mb-5"
           onerror="
             this.style.display = 'none';
             this.nextElementSibling.style.display = 'block';
@@ -93,39 +125,44 @@
         />
         <div class="hidden text-6xl mb-4">🏫</div>
         <h1
-          class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 leading-tight"
+          class="text-2xl sm:text-3xl font-extrabold text-ink mb-1.5 leading-tight tracking-tight"
         >
           Remedial UAS Informatika
         </h1>
-        <p class="text-primary font-semibold text-lg mb-3">Kelas 8</p>
-        <p class="text-gray-600 text-sm sm:text-base mb-6 leading-relaxed">
+        <div class="mb-5">
+          <span class="text-primary font-bold text-sm bg-blue-50/80 px-3.5 py-1.5 rounded-full">Kelas VIII (Delapan)</span>
+        </div>
+        <p class="text-ink/70 text-sm sm:text-base mb-6 leading-relaxed">
           Sebelum mulai, masukkan <strong>nama lengkap</strong> kamu terlebih
           dahulu. Nama ini akan tersimpan di perangkat ini.
         </p>
 
-        <form id="login-form" class="space-y-3 text-left">
-          <label
-            for="name-input"
-            class="block text-sm font-medium text-gray-700"
-            >Nama Lengkap</label
-          >
-          <input
-            id="name-input"
-            type="text"
-            inputmode="text"
-            autocomplete="name"
-            maxlength="60"
-            class="w-full px-4 py-3.5 text-base rounded-xl border-2 border-gray-200 focus:border-primary focus:outline-none focus:ring-2 focus:ring-blue-100 transition-colors"
-          />
-          <p id="name-error" class="hidden text-sm text-red-500 font-medium">
-            ⚠ Nama tidak boleh kosong.
-          </p>
+        <form id="login-form" class="space-y-4 text-left">
+          <div>
+            <label
+              for="name-input"
+              class="block text-sm font-semibold text-ink/80 mb-1.5"
+              >Nama Lengkap</label
+            >
+            <input
+              id="name-input"
+              type="text"
+              inputmode="text"
+              autocomplete="name"
+              maxlength="60"
+              placeholder="Masukkan nama lengkap..."
+              class="w-full px-4 py-3.5 text-base text-ink bg-slate-50/50 rounded-2xl border-2 border-slate-100 focus:bg-white focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all duration-200"
+            />
+            <p id="name-error" class="hidden text-xs text-error font-semibold mt-1.5 flex items-center gap-1">
+              ⚠ Nama tidak boleh kosong.
+            </p>
+          </div>
 
           <button
             id="login-btn"
             type="submit"
             disabled
-            class="w-full bg-primary text-white font-semibold text-lg py-3.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98] disabled:bg-gray-300 disabled:shadow-none disabled:cursor-not-allowed disabled:active:scale-100"
+            class="w-full bg-primary hover:bg-primary-dark text-white font-bold text-base py-3.5 rounded-2xl shadow-button transition-all duration-200 active:scale-[0.98] disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none disabled:cursor-not-allowed disabled:active:scale-100"
           >
             Masuk
           </button>
@@ -135,67 +172,64 @@
       <!-- ===================== DASHBOARD SCREEN ===================== -->
       <section
         id="dashboard-screen"
-        class="hidden bg-white rounded-2xl shadow-xl p-6 sm:p-8 text-center fade-in"
+        class="hidden bg-white rounded-3xl border border-slate-100 shadow-soft p-5 sm:p-6 text-center fade-in"
       >
         <!-- Mini-header: logo + nama sekolah -->
-        <div
-          class="flex items-center gap-3 mb-4 pb-3 border-b border-gray-100 text-left"
-        >
+        <div class="flex items-center gap-3.5 mb-5 pb-4 border-b border-slate-100 text-left">
           <img
             src="logo-sekolah.svg"
-            alt="Logo SMP Muhammadiyah 1 Tangerang"
-            class="w-36 h-36 object-contain shrink-0"
+            alt="Logo Sekolah"
+            class="w-12 h-12 object-contain shrink-0"
             onerror="
               this.style.display = 'none';
               this.nextElementSibling.style.display = 'flex';
             "
           />
           <span
-            class="hidden w-36 h-36 items-center justify-center text-3xl shrink-0"
+            class="hidden w-12 h-12 items-center justify-center text-2xl shrink-0"
             >🏫</span
           >
-          <div class="flex flex-col">
-            <!-- <span class="text-xs sm:text-lg font-semibold text-gray-500 leading-tight"
-              >SMP Muhammadiyah 1 Tangerang</span
-            > -->
-            <h1 class="text-lg sm:text-xl font-semibold text-gray-800 mt-2 leading-tight">
-              Remedial UAS Informatika Kelas VIII/8
+          <div>
+            <span class="text-[10px] sm:text-xs font-bold text-primary tracking-wider uppercase">UAS Remedial</span>
+            <h1 class="text-base sm:text-lg font-extrabold text-ink leading-tight">
+              Informatika Kelas VIII
             </h1>
           </div>
         </div>
 
-        <h2
-          class="text-base sm:text-lg font-bold text-gray-800 mb-5 leading-tight"
-        >
-          Halo,
-          <span
+        <!-- Greeting -->
+        <div class="text-left mb-5">
+          <span class="text-xs font-semibold text-ink/50 uppercase tracking-wider">Selamat Datang</span>
+          <h2
             id="greeting-name"
-            class="text-primary block truncate"
+            class="text-lg sm:text-xl font-extrabold text-ink truncate mt-0.5"
             title=""
-          ></span>
-        </h2>
+          ></h2>
+        </div>
 
-        <!-- Best score + status -->
-        <div class="bg-card rounded-xl p-4 mb-5">
-          <p class="text-sm text-gray-500 mb-1">Skor Terbaik</p>
-          <p id="dashboard-best-score" class="text-4xl font-bold text-primary">
+        <!-- Best score + status card -->
+        <div class="bg-slate-50 border border-slate-100/70 rounded-2xl p-4 mb-6 flex items-center justify-between text-left">
+          <div>
+            <p class="text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1">Skor Terbaik</p>
+            <span
+              id="status-badge"
+              class="inline-block px-2.5 py-1 rounded-full text-xs font-bold shadow-sm"
+              >—</span
+            >
+          </div>
+          <p id="dashboard-best-score" class="text-4xl font-extrabold text-primary tracking-tight">
             0
           </p>
-          <span
-            id="status-badge"
-            class="inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold"
-            >—</span
-          >
         </div>
 
         <!-- History -->
         <div class="text-left mb-6">
-          <p class="text-sm font-semibold text-gray-700 mb-2">
-            📜 Riwayat Percobaan
+          <p class="text-sm font-bold text-ink/80 mb-3 flex items-center gap-1.5">
+            <span>📜</span> Riwayat Percobaan
           </p>
           <ul
             id="history-list"
-            class="space-y-2 max-h-56 overflow-y-auto pr-1 text-left"
+            class="space-y-3 max-h-60 overflow-y-auto pr-1 text-left scrollbar-thin"
           >
             <!-- rendered by JS -->
           </ul>
@@ -204,34 +238,37 @@
         <!-- Action buttons (toggled by JS) -->
         <div
           id="passing-grade-info"
-          class="hidden text-sm text-gray-600 mb-4 bg-amber-50 border border-amber-200 rounded-xl p-3 text-left flex items-start gap-2"
+          class="hidden text-xs sm:text-sm text-ink/80 mb-5 bg-amber-50 border border-amber-100 rounded-2xl p-3.5 text-left flex items-start gap-2.5"
         >
-          <span class="text-amber-600 text-lg leading-none">⚠️</span>
-          <span>Nilai remedial wajib minimal 70, jika kurang dari 70 maka harap mengulang remedial kembali.</span>
+          <span class="text-amber-500 text-lg leading-none shrink-0">⚠️</span>
+          <span class="leading-relaxed">Nilai remedial wajib minimal <strong>70</strong>. Jika kurang dari 70, kamu harap mengulang kuis kembali.</span>
         </div>
+        
         <button
           id="start-remedial-btn"
-          class="w-full bg-primary hover:bg-primary-dark text-white font-semibold text-lg py-3.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
+          class="w-full bg-primary hover:bg-primary-dark text-white font-bold text-base py-3.5 rounded-2xl shadow-button transition-all duration-200 active:scale-[0.98]"
         >
           Mulai Remedial
         </button>
+        
         <div
           id="wa-info-text"
-          class="hidden text-sm text-gray-600 mb-3 bg-green-50 border border-green-200 rounded-xl p-3 text-left flex items-start gap-2"
+          class="hidden text-xs sm:text-sm text-ink/80 mb-4 bg-green-50 border border-green-100 rounded-2xl p-3.5 text-left flex items-start gap-2.5"
         >
-          <span class="text-green-600 text-lg leading-none">💡</span>
-          <span>Setelah lulus remedial wajib screenshot/ss hasil ke WhatsApp Kak Nabil dengan klik tombol dibawah ini.</span>
+          <span class="text-green-500 text-lg leading-none shrink-0">💡</span>
+          <span class="leading-relaxed">Setelah lulus remedial, wajib screenshot (SS) hasil kuis dan kirim ke WhatsApp Kak Nabil dengan klik tombol di bawah.</span>
         </div>
+        
         <a
           id="wa-btn"
           href="#"
           target="_blank"
           rel="noopener"
-          class="hidden w-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-semibold text-sm sm:text-base py-2.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98] flex items-center justify-center gap-2"
+          class="hidden w-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-sm sm:text-base py-3.5 rounded-2xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98] flex items-center justify-center gap-2"
         >
-          <span class="w-7 h-7 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm">
+          <span class="w-6 h-6 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm">
             <svg
-              class="w-5 h-5"
+              class="w-4 h-4"
               viewBox="0 0 48 48"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -252,93 +289,81 @@
       <!-- ===================== QUIZ SCREEN ===================== -->
       <section
         id="quiz-screen"
-        class="hidden bg-white rounded-2xl shadow-xl p-5 sm:p-7"
+        class="hidden bg-white rounded-3xl border border-slate-100 shadow-soft p-5 sm:p-6"
       >
-        <!-- Mini-header: logo + nama sekolah -->
-        <div
-          class="flex items-center gap-0 mb-4 pb-3 border-b border-gray-100 text-left"
-        >
-          <img
-            src="logo-sekolah.svg"
-            alt="Logo SMP Muhammadiyah 1 Tangerang"
-            class="w-20 h-20 object-contain shrink-0"
-            onerror="
-              this.style.display = 'none';
-              this.nextElementSibling.style.display = 'flex';
-            "
-          />
-          <span
-            class="hidden w-20 h-20 items-center justify-center text-3xl shrink-0"
-            >🏫</span
-          >
-          <span class="text-base sm:text-lg font-semibold text-gray-700 leading-tight"
-            >Remidi UAS Informatika Kelas VIII/8</span
-          >
-        </div>
-
-        <!-- Progress -->
-        <div class="mb-5">
-          <div class="flex justify-between items-center mb-2 gap-2">
-            <span id="progress-text" class="text-sm font-medium text-gray-600"
-              >Soal 1 dari 20</span
+        <!-- Quiz Header -->
+        <div class="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
+          <div class="flex items-center gap-2">
+            <button
+              id="quiz-exit-btn"
+              type="button"
+              class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200/80 text-ink/60 flex items-center justify-center transition-all duration-200 active:scale-90"
+              title="Keluar Kuis"
             >
+              <span class="text-sm font-bold leading-none">✕</span>
+            </button>
+            <span id="progress-text" class="text-xs font-bold text-ink/50 uppercase tracking-wider">Soal 1 dari 20</span>
+          </div>
+          <div class="flex items-center gap-2.5">
             <span
               id="quiz-timer"
-              class="text-sm font-medium text-gray-500 tabular-nums"
+              class="text-xs font-bold text-ink/60 bg-slate-100 px-2.5 py-1.5 rounded-full tabular-nums"
               >⏱ 00:00</span
             >
-            <span id="score-text" class="text-sm font-semibold text-primary"
+            <span id="score-text" class="text-xs font-bold text-primary bg-blue-50 px-2.5 py-1.5 rounded-full"
               >Skor: 0</span
             >
           </div>
-          <div class="w-full bg-gray-200 rounded-full h-2.5">
-            <div
-              id="progress-bar"
-              class="bg-primary h-2.5 rounded-full transition-all duration-300"
-              style="width: 5%"
-            ></div>
-          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="w-full bg-slate-100 rounded-full h-1.5 mb-5 overflow-hidden">
+          <div
+            id="progress-bar"
+            class="bg-primary h-1.5 rounded-full transition-all duration-300"
+            style="width: 5%"
+          ></div>
         </div>
 
         <!-- Question -->
-        <div id="question-box" class="mb-5">
+        <div id="question-box" class="mb-5 text-left">
           <span
             id="question-number"
-            class="inline-block bg-blue-100 text-primary text-sm font-semibold px-3 py-1 rounded-full mb-3"
+            class="inline-block bg-primary/10 text-primary text-xs font-bold px-2.5 py-1 rounded-full mb-3 uppercase tracking-wider"
           >
             Soal 1
           </span>
           <p
             id="question-text"
-            class="text-lg sm:text-xl font-medium text-gray-800 leading-snug"
+            class="text-base sm:text-lg font-bold text-ink leading-snug"
           >
             Pertanyaan akan muncul di sini.
           </p>
         </div>
 
         <!-- Options -->
-        <div id="options-container" class="space-y-3 mb-4">
+        <div id="options-container" class="space-y-3 mb-5">
           <!-- Options rendered by JS -->
         </div>
 
         <!-- Explanation card (hidden until answered) -->
         <div
           id="explanation-box"
-          class="hidden slide-in bg-blue-50 border-l-4 border-primary rounded-lg p-4 mb-4"
+          class="hidden slide-in bg-slate-50 border border-slate-100 rounded-2xl p-4 mb-4 text-left"
         >
-          <p class="text-sm font-semibold text-primary mb-1">
-            💡 Penjelasan Jawaban
+          <p class="text-xs font-bold text-primary uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+            <span>💡</span> Penjelasan Jawaban
           </p>
           <p
             id="explanation-text"
-            class="text-sm sm:text-base text-gray-700 leading-relaxed"
+            class="text-xs sm:text-sm text-ink/75 leading-relaxed"
           ></p>
         </div>
 
         <!-- Next button (hidden until answered) -->
         <button
           id="next-btn"
-          class="hidden slide-in w-full bg-primary hover:bg-primary-dark text-white font-semibold text-lg py-3.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
+          class="hidden slide-in w-full bg-primary hover:bg-primary-dark text-white font-bold text-base py-3.5 rounded-2xl shadow-button transition-all duration-200 active:scale-[0.98]"
         >
           Soal Selanjutnya
         </button>
@@ -347,75 +372,75 @@
       <!-- ===================== RESULT SCREEN ===================== -->
       <section
         id="result-screen"
-        class="hidden bg-white rounded-2xl shadow-xl p-6 sm:p-8 text-center"
+        class="hidden bg-white rounded-3xl border border-slate-100 shadow-soft p-5 sm:p-6 text-center"
       >
         <!-- Logo sekolah sebagai stamp resmi (untuk screenshot WA) -->
         <img
           src="logo-sekolah.svg"
-          alt="Logo SMP Muhammadiyah 1 Tangerang"
-          class="w-36 h-36 object-contain mx-auto mb-3"
+          alt="Logo Sekolah"
+          class="w-16 h-16 object-contain mx-auto mb-4"
           onerror="
             this.style.display = 'none';
             this.nextElementSibling.style.display = 'block';
           "
         />
         <div class="hidden text-5xl mb-3">🏫</div>
-        <div id="result-emoji" class="text-5xl mb-3">🎉</div>
+        <div id="result-emoji" class="text-5xl mb-3.5">🎉</div>
         <h2
           id="result-title"
-          class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2"
+          class="text-2xl sm:text-3xl font-extrabold text-ink mb-1.5 tracking-tight"
         >
           Kuis Selesai!
         </h2>
         <p
           id="result-status-message"
-          class="text-gray-600 text-sm sm:text-base mb-5 leading-relaxed"
+          class="text-ink/75 text-sm sm:text-base mb-5 leading-relaxed"
         ></p>
 
         <!-- Score -->
-        <div class="bg-card rounded-xl p-5 mb-4">
-          <p class="text-sm text-gray-500 mb-1">Total Skor</p>
-          <p id="final-score" class="text-5xl font-bold text-primary">0</p>
-          <p class="text-sm text-gray-500 mt-1">dari 100</p>
+        <div class="bg-slate-50 border border-slate-100/70 rounded-2xl p-5 mb-5 text-center shadow-inner">
+          <p class="text-xs font-semibold text-ink/50 uppercase tracking-wider mb-1">Total Skor</p>
+          <p id="final-score" class="text-5xl font-extrabold text-primary tracking-tight">0</p>
+          <p class="text-[10px] font-bold text-ink/40 uppercase tracking-wider mt-1.5">dari 100</p>
         </div>
 
         <!-- Stats -->
         <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-6">
-          <div class="bg-green-50 rounded-lg p-3">
-            <p class="text-xl sm:text-2xl font-bold text-green-600" id="correct-count">
+          <div class="bg-success/5 border border-success/10 rounded-xl p-3 flex flex-col justify-between items-center">
+            <p class="text-lg sm:text-xl font-extrabold text-success" id="correct-count">
               0
             </p>
-            <p class="text-xs text-gray-600 mt-1">Benar</p>
+            <p class="text-[9px] font-bold text-success/70 uppercase tracking-wider mt-1">Benar</p>
           </div>
-          <div class="bg-red-50 rounded-lg p-3">
-            <p class="text-xl sm:text-2xl font-bold text-red-500" id="wrong-count">0</p>
-            <p class="text-xs text-gray-600 mt-1">Salah</p>
+          <div class="bg-error/5 border border-error/10 rounded-xl p-3 flex flex-col justify-between items-center">
+            <p class="text-lg sm:text-xl font-extrabold text-error" id="wrong-count">0</p>
+            <p class="text-[9px] font-bold text-error/70 uppercase tracking-wider mt-1">Salah</p>
           </div>
-          <div class="bg-blue-50 rounded-lg p-3">
+          <div class="bg-blue-50/50 border border-blue-100/30 rounded-xl p-3 flex flex-col justify-between items-center">
             <p
               id="result-duration"
-              class="text-xl sm:text-2xl font-bold text-blue-600 tabular-nums"
+              class="text-lg sm:text-xl font-extrabold text-primary tabular-nums"
             >
               00:00
             </p>
-            <p class="text-xs text-gray-600 mt-1">Waktu</p>
+            <p class="text-[9px] font-bold text-primary/70 uppercase tracking-wider mt-1">Waktu</p>
           </div>
         </div>
 
         <!-- Review -->
         <div class="text-left mb-6">
-          <p class="text-sm font-semibold text-gray-700 mb-2 text-center">
+          <p class="text-sm font-bold text-ink/80 mb-3 text-center">
             📋 Review Jawaban
           </p>
           <div
             id="review-container"
-            class="space-y-2 max-h-72 overflow-y-auto pr-1"
+            class="space-y-2.5 max-h-60 overflow-y-auto pr-1 text-left scrollbar-thin"
           ></div>
         </div>
 
         <button
           id="back-to-dashboard-btn"
-          class="w-full bg-primary hover:bg-primary-dark text-white font-semibold text-lg py-3.5 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
+          class="w-full bg-primary hover:bg-primary-dark text-white font-bold text-base py-3.5 rounded-2xl shadow-button transition-all duration-200 active:scale-[0.98]"
         >
           Kembali ke Dashboard
         </button>
@@ -425,27 +450,27 @@
     <!-- ===================== CUSTOM CONFIRM MODAL ===================== -->
     <div
       id="confirm-modal"
-      class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm transition-opacity duration-300 opacity-0"
+      class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300 opacity-0"
     >
       <div
-        class="bg-white rounded-2xl shadow-2xl p-6 sm:p-7 max-w-md w-full text-center scale-95 opacity-0 transition-all duration-300 transform"
+        class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 sm:p-7 max-w-md w-full text-center scale-95 opacity-0 transition-all duration-300 transform"
         id="confirm-modal-card"
       >
         <div class="text-4xl mb-3">📝</div>
-        <h3 class="text-xl font-bold text-gray-800 mb-3">Petunjuk Remedial</h3>
-        <p class="text-gray-600 text-sm sm:text-base mb-6 leading-relaxed text-left">
+        <h3 class="text-xl font-extrabold text-ink mb-2">Petunjuk Remedial</h3>
+        <p class="text-ink/70 text-sm sm:text-base mb-6 leading-relaxed text-left">
           Soal remedial berjumlah <strong>20 Soal Pilihan Ganda</strong>. Pastikan membaca soal dan menjawab dengan teliti. Tidak ada batas waktu pengerjaan setiap soal. Kamu dipersilahkan mencari jawaban dari internet, berdiskusi dengan teman, maupun dengan orang tua.
         </p>
         <div class="flex gap-3">
           <button
             id="confirm-cancel-btn"
-            class="flex-1 border-2 border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold py-3 rounded-xl transition-all duration-200 active:scale-[0.98]"
+            class="flex-1 border-2 border-slate-200 hover:bg-slate-50 text-ink/70 font-bold py-3 rounded-2xl transition-all duration-200 active:scale-[0.98]"
           >
             Batal
           </button>
           <button
             id="confirm-start-btn"
-            class="flex-1 bg-primary hover:bg-primary-dark text-white font-semibold py-3 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
+            class="flex-1 bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-2xl shadow-button transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
           >
             Mulai Kuis
           </button>
@@ -453,7 +478,36 @@
       </div>
     </div>
 
-    <!-- ===================== EVALUATION MODAL ===================== -->
+    <!-- ===================== EXIT CONFIRM MODAL ===================== -->
+    <div
+      id="exit-confirm-modal"
+      class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300 opacity-0"
+    >
+      <div
+        class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 sm:p-7 max-w-sm w-full text-center scale-95 opacity-0 transition-all duration-300 transform"
+        id="exit-confirm-modal-card"
+      >
+        <div class="text-4xl mb-3">🚪</div>
+        <h3 class="text-xl font-extrabold text-ink mb-2">Keluar Kuis?</h3>
+        <p class="text-ink/70 text-sm mb-6 leading-relaxed text-center">
+          Apakah kamu yakin ingin keluar dari kuis? Progress jawaban kuis kamu saat ini akan hilang.
+        </p>
+        <div class="flex gap-3">
+          <button
+            id="exit-confirm-cancel-btn"
+            class="flex-1 border-2 border-slate-200 hover:bg-slate-50 text-ink/70 font-bold py-3 rounded-2xl transition-all duration-200 active:scale-[0.98]"
+          >
+            Batal
+          </button>
+          <button
+            id="exit-confirm-btn"
+            class="flex-1 bg-error hover:bg-error/90 text-white font-bold py-3 rounded-2xl transition-all duration-200 active:scale-[0.98]"
+          >
+            Keluar
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- Scripts (order matters: data first, then logic) -->
     <script src="quiz-data.js"></script>
