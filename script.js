@@ -441,7 +441,10 @@
       if (els.passingGradeInfo) els.passingGradeInfo.classList.add("hidden");
       els.waBtn.classList.remove("hidden");
       if (els.waInfoText) els.waInfoText.classList.remove("hidden");
-      els.waBtn.href = buildWhatsAppUrl(session.name, bestScore);
+      // Cari durasi dari percobaan yang lulus (ambil yang pertama lulus)
+      const passedAttempt = session.history.find((h) => h.score >= PASSING_GRADE);
+      const bestDuration = passedAttempt ? passedAttempt.duration : null;
+      els.waBtn.href = buildWhatsAppUrl(session.name, bestScore, bestDuration);
     } else {
       els.startRemedialBtn.classList.remove("hidden");
       if (els.passingGradeInfo) els.passingGradeInfo.classList.remove("hidden");
@@ -566,10 +569,13 @@
   //  WHATSAPP
   // ============================================================
 
-  function buildWhatsAppUrl(name, bestScore) {
+  function buildWhatsAppUrl(name, bestScore, duration) {
+    const durationText = (duration !== null && duration !== undefined)
+      ? ` dalam waktu ${formatDurationHuman(duration)}`
+      : "";
     const text =
       `Assalamu'alaikum warahmatullahi wabarakatuh Kak Nabil, saya ${name} dari kelas VIII/8 telah berhasil menyelesaikan remedial UAS Informatika ` +
-      `dengan nilai akhir ${bestScore}. Berikut saya berikan screenshot hasilnya.`;
+      `dengan nilai akhir ${bestScore}${durationText}. Berikut saya berikan screenshot hasilnya.`;
     return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
   }
 
@@ -1025,7 +1031,7 @@
     });
 
     // Swap logo sekolah: gunakan versi dark saat dark mode aktif
-    const logoSrc = themeName === "dark" ? "logo-sekolah-dark.png" : "logo-sekolah.svg";
+    const logoSrc = themeName === "dark" ? "logo-sekolah-dark.svg" : "logo-sekolah.svg";
     document.querySelectorAll("img[data-school-logo]").forEach((img) => {
       img.src = logoSrc;
     });
