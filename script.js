@@ -53,6 +53,7 @@
     confirmModalCard:   document.getElementById("confirm-modal-card"),
     confirmCancelBtn:   document.getElementById("confirm-cancel-btn"),
     confirmStartBtn:    document.getElementById("confirm-start-btn"),
+    confirmModalTotalQuestions: document.getElementById("confirm-modal-total-questions"),
     // Quiz
     quizTimer:       document.getElementById("quiz-timer"),
     quizExitBtn:     document.getElementById("quiz-exit-btn"),
@@ -256,6 +257,22 @@
       .replace(/'/g, "&#039;");
   }
 
+  // Convert simple markdown (**bold** and *italic*) to HTML after escaping
+  function formatMarkdown(text) {
+    if (typeof text !== "string") return "";
+    return escapeHtml(text)
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.*?)\*/g, "<em>$1</em>");
+  }
+
+  // Convert only simple italic (*italic*) to HTML after escaping, disabling bold
+  function formatItalicOnly(text) {
+    if (typeof text !== "string") return "";
+    return escapeHtml(text)
+      .replace(/\*\*(.*?)\*\*/g, "$1")
+      .replace(/\*(.*?)\*/g, "<em>$1</em>");
+  }
+
   // Title Case + normalisasi spasi: "nabil  ihsan" -> "Nabil Ihsan"
   function toTitleCase(str) {
     return str
@@ -441,7 +458,10 @@
       if (els.passingGradeInfo) els.passingGradeInfo.classList.add("hidden");
       els.waBtn.classList.remove("hidden");
       if (els.waInfoText) els.waInfoText.classList.remove("hidden");
-      els.waBtn.href = buildWhatsAppUrl(session.name, bestScore);
+      // Cari durasi dari percobaan yang lulus (ambil yang pertama lulus)
+      const passedAttempt = session.history.find((h) => h.score >= PASSING_GRADE);
+      const bestDuration = passedAttempt ? passedAttempt.duration : null;
+      els.waBtn.href = buildWhatsAppUrl(session.name, bestScore, bestDuration);
     } else {
       els.startRemedialBtn.classList.remove("hidden");
       if (els.passingGradeInfo) els.passingGradeInfo.classList.remove("hidden");
@@ -457,7 +477,7 @@
   function renderHistoryExpandable(session) {
     if (!session.history || session.history.length === 0) {
       els.historyList.innerHTML =
-        '<li class="text-sm text-gray-400 italic text-center py-2">Belum ada percobaan</li>';
+        '<li class="text-sm text-ink/40 italic text-center py-2">Belum ada percobaan</li>';
       return;
     }
 
@@ -468,7 +488,7 @@
     reversed.forEach((h) => {
       const passed = h.score >= PASSING_GRADE;
       const color = passed ? "text-success" : "text-ink/70";
-      const badge = passed ? "bg-success/10 text-success" : "bg-slate-200/60 text-ink/50";
+      const badge = passed ? "bg-success/10 text-success" : "bg-border text-ink/50";
 
       // Tentukan correctCount / wrongCount / wrongQuestions (komputasi ulang dari answers untuk data lama)
       let correctCount = h.correctCount;
@@ -492,7 +512,7 @@
       // ---- Baris utama (klik untuk toggle) ----
       const headerLi = document.createElement("li");
       headerLi.className =
-        "flex items-center justify-between bg-slate-50 border border-slate-100 rounded-2xl px-4 py-3.5 cursor-pointer hover:bg-slate-100/70 transition-all duration-200 select-none shadow-sm";
+        "flex items-center justify-between bg-bg border border-border rounded-2xl px-4 py-3.5 cursor-pointer hover:bg-border/50 transition-all duration-200 select-none shadow-sm";
       headerLi.dataset.attempt = String(h.attempt);
       headerLi.dataset.passed = String(passed);
       headerLi.innerHTML =
@@ -515,7 +535,7 @@
         : "N/A";
 
       let detailHTML =
-        `<div class="bg-white border border-slate-100/80 rounded-2xl p-4 mt-2 mb-1 space-y-3 shadow-inner">` +
+        `<div class="bg-card border border-border rounded-2xl p-4 mt-2 mb-1 space-y-3 shadow-inner">` +
           // Ringkasan statistik
           `<div class="grid grid-cols-3 gap-2.5 text-center">` +
             `<div class="bg-success/5 border border-success/10 rounded-xl p-2 flex flex-col justify-between items-center">` +
@@ -526,7 +546,7 @@
               `<p class="font-extrabold text-error text-sm sm:text-base leading-tight">${wrongCount}</p>` +
               `<p class="text-[9px] font-bold text-error/70 uppercase tracking-wider mt-1">Salah</p>` +
             `</div>` +
-            `<div class="bg-blue-50/50 border border-blue-100/30 rounded-xl p-2 flex flex-col justify-between items-center">` +
+            `<div class="bg-primary/5 border border-primary/15 rounded-xl p-2 flex flex-col justify-between items-center">` +
               `<p class="font-extrabold text-primary text-sm sm:text-base leading-tight">${escapeHtml(durationText)}</p>` +
               `<p class="text-[9px] font-bold text-primary/70 uppercase tracking-wider mt-1">Waktu</p>` +
             `</div>` +
@@ -543,7 +563,7 @@
             `<p class="text-[11px] font-bold text-ink/50 uppercase tracking-wider pt-2">Soal yang salah:</p>` +
             `<div class="space-y-1.5">` +
               wrongQuestions.map((wq) =>
-                `<div class="flex items-center justify-between text-xs bg-error/5 border border-error/10 rounded-xl px-3 py-2 text-ink/80">` +
+                `<div class="flex items-center justify-between text-xs bg-error/5 border border-error/10 rounded-xl px-3 py-2">` +
                   `<span class="font-semibold text-ink/70">Soal ${escapeHtml(String(wq.no))}</span>` +
                   `<span class="text-error font-bold">Jawabanmu: ${escapeHtml(String(wq.selected))}</span>` +
                 `</div>`
@@ -566,10 +586,13 @@
   //  WHATSAPP
   // ============================================================
 
-  function buildWhatsAppUrl(name, bestScore) {
+  function buildWhatsAppUrl(name, bestScore, duration) {
+    const durationText = (duration !== null && duration !== undefined)
+      ? ` dalam waktu ${formatDurationHuman(duration)}`
+      : "";
     const text =
-      `Assalamu'alaikum warahmatullahi wabarakatuh Kak Nabil, saya ${name} dari kelas VIII/8 telah berhasil menyelesaikan remedial UAS Informatika ` +
-      `dengan nilai akhir ${bestScore}. Berikut saya berikan screenshot hasilnya.`;
+      `Assalamu'alaikum warahmatullahi wabarakatuh Kak Nabil, saya ${name} dari kelas VIII/8 telah berhasil menyelesaikan Remedial UAS Mapel Informatika ` +
+      `dengan nilai akhir ${bestScore}${durationText}. Berikut saya berikan screenshot hasilnya.`;
     return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
   }
 
@@ -617,7 +640,7 @@
 
     // Nomor & teks soal
     els.questionNumber.textContent = `Soal ${currentQuestionIndex + 1}`;
-    els.questionText.textContent = q.question;
+    els.questionText.innerHTML = formatItalicOnly(q.question);
 
     // Render opsi
     els.optionsContainer.innerHTML = "";
@@ -626,15 +649,15 @@
       btn.type = "button";
       btn.dataset.index = idx;
       btn.className =
-        "option-btn w-full text-left p-3.5 rounded-2xl border-2 border-slate-100 bg-white shadow-sm " +
+        "option-btn w-full text-left p-3.5 rounded-2xl border-2 border-border bg-card shadow-sm " +
         "flex items-center gap-3.5 transition-all duration-200 " +
-        "hover:border-primary/45 hover:bg-slate-50/50 active:scale-[0.99] " +
-        "disabled:cursor-default disabled:hover:border-slate-100 disabled:hover:bg-white";
+        "hover:border-primary/45 hover:bg-bg active:scale-[0.99] " +
+        "disabled:cursor-default disabled:hover:border-border disabled:hover:bg-card";
 
       btn.innerHTML =
-        `<span class="option-letter shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-ink/70 font-extrabold text-sm transition-all duration-200">` +
+        `<span class="option-letter shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-border text-ink/70 font-extrabold text-sm transition-all duration-200">` +
         `${OPTION_LETTERS[idx]}</span>` +
-        `<span class="option-text flex-1 text-sm sm:text-base text-ink/80 font-medium leading-snug">${escapeHtml(opt)}</span>`;
+        `<span class="option-text flex-1 text-sm sm:text-base text-ink/80 font-medium leading-snug">${formatItalicOnly(opt)}</span>`;
 
       btn.addEventListener("click", () => selectAnswer(idx));
       els.optionsContainer.appendChild(btn);
@@ -650,16 +673,16 @@
         btn.disabled = true;
 
         if (idx === correctIdx) {
-          btn.classList.remove("border-slate-100", "bg-white");
+          btn.classList.remove("border-border", "bg-card");
           btn.classList.add("border-success", "bg-success/5");
-          btn.querySelector(".option-letter").classList.remove("bg-slate-100", "text-ink/70");
+          btn.querySelector(".option-letter").classList.remove("bg-border", "text-ink/70");
           btn.querySelector(".option-letter").classList.add("bg-success", "text-white");
           btn.querySelector(".option-text").classList.add("text-success", "font-bold");
           appendMark(btn, "✓", "text-success");
         } else if (idx === selectedIdx) {
-          btn.classList.remove("border-slate-100", "bg-white");
+          btn.classList.remove("border-border", "bg-card");
           btn.classList.add("border-error", "bg-error/5");
-          btn.querySelector(".option-letter").classList.remove("bg-slate-100", "text-ink/70");
+          btn.querySelector(".option-letter").classList.remove("bg-border", "text-ink/70");
           btn.querySelector(".option-letter").classList.add("bg-error", "text-white");
           btn.querySelector(".option-text").classList.add("text-error", "font-bold");
           appendMark(btn, "✗", "text-error");
@@ -668,7 +691,7 @@
         }
       });
 
-      els.explanationText.textContent = q.explanation;
+      els.explanationText.innerHTML = formatMarkdown(q.explanation);
       els.explanationBox.classList.remove("hidden");
 
       const isLast = currentQuestionIndex === quizData.length - 1;
@@ -701,17 +724,17 @@
 
       if (idx === correct) {
         // Tandai jawaban BENAR dengan hijau
-        btn.classList.remove("border-slate-100", "bg-white");
+        btn.classList.remove("border-border", "bg-card");
         btn.classList.add("border-success", "bg-success/5");
-        btn.querySelector(".option-letter").classList.remove("bg-slate-100", "text-ink/70");
+        btn.querySelector(".option-letter").classList.remove("bg-border", "text-ink/70");
         btn.querySelector(".option-letter").classList.add("bg-success", "text-white");
         btn.querySelector(".option-text").classList.add("text-success", "font-bold");
         appendMark(btn, "✓", "text-success");
       } else if (idx === index) {
         // Tandai pilihan siswa yang SALAH dengan merah
-        btn.classList.remove("border-slate-100", "bg-white");
+        btn.classList.remove("border-border", "bg-card");
         btn.classList.add("border-error", "bg-error/5");
-        btn.querySelector(".option-letter").classList.remove("bg-slate-100", "text-ink/70");
+        btn.querySelector(".option-letter").classList.remove("bg-border", "text-ink/70");
         btn.querySelector(".option-letter").classList.add("bg-error", "text-white");
         btn.querySelector(".option-text").classList.add("text-error", "font-bold");
         appendMark(btn, "✗", "text-error");
@@ -728,7 +751,7 @@
     }
 
     // Tampilkan penjelasan
-    els.explanationText.textContent = q.explanation;
+    els.explanationText.innerHTML = formatMarkdown(q.explanation);
     els.explanationBox.classList.remove("hidden");
     void els.explanationBox.offsetWidth; // re-trigger animasi
     els.explanationBox.classList.add("slide-in");
@@ -999,6 +1022,52 @@
   window.addEventListener("beforeunload", () => {
     stopTimer();
   });
+
+  // ---------- Theme Switcher Logic ----------
+  const themeButtons = {
+    light: document.getElementById("theme-light-btn"),
+    dark:  document.getElementById("theme-dark-btn"),
+    warm:  document.getElementById("theme-warm-btn")
+  };
+
+  function applyTheme(themeName) {
+    document.documentElement.classList.remove("theme-dark", "theme-warm");
+    if (themeName !== "light") {
+      document.documentElement.classList.add("theme-" + themeName);
+    }
+    localStorage.setItem("kuis-theme", themeName);
+    Object.keys(themeButtons).forEach((name) => {
+      const btn = themeButtons[name];
+      if (btn) {
+        if (name === themeName) {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+      }
+    });
+
+    // Swap logo sekolah: gunakan versi dark saat dark mode aktif
+    const logoSrc = themeName === "dark" ? "logo-sekolah-dark.svg" : "logo-sekolah.svg";
+    document.querySelectorAll("img[data-school-logo]").forEach((img) => {
+      img.src = logoSrc;
+    });
+  }
+
+  Object.keys(themeButtons).forEach((name) => {
+    const btn = themeButtons[name];
+    if (btn) {
+      btn.addEventListener("click", () => applyTheme(name));
+    }
+  });
+
+  const currentTheme = localStorage.getItem("kuis-theme") || "light";
+  applyTheme(currentTheme);
+
+  // Update total questions in instruction modal dynamically
+  if (els.confirmModalTotalQuestions && typeof quizData !== "undefined") {
+    els.confirmModalTotalQuestions.textContent = `${quizData.length} Soal Pilihan Ganda`;
+  }
 
   // Tampilan awal: prioritas — hasil kuis (refresh) > kuis yang tertunda (anti-refresh) > session > login
   const pendingResult = loadResultState();
